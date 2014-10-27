@@ -1,0 +1,162 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{listings}
+\usepackage{enumerate}
+
+\begin{document}
+Jayme Woogerd \\
+\indent Comp 150PLD - Programming Language Design \\
+\indent October 15, 2014 \\
+\indent Final Project Design Proposal \\
+        
+\begin{enumerate}[1)]
+\item I plan to create a language to for programmatically specifying, generating, 
+and analyzing surveys. Specifically, my language will target the type of surveys 
+administered for research in the social sciences.
+
+\item The intended users of this language are domain experts in a research
+field in which surveys are a major means of data collection, e.g economics or 
+education. I assume users will have some knowledge of survey design and 
+statistical analysis, but may have little or no formal programming experience.
+
+In general, users will want to: 1) write (specify) survey questions and 
+response types, 2) generate and deploy a survey and 3) perform statistical 
+analysis on the results.
+
+\item Goals:
+
+\begin{enumerate}[i)]
+\item The language should be small, simple, and easy to learn for non-programmers
+In fact, my idea is that the surface syntax will look more like markup (plus some
+control-flow constructs) than code
+\item It should be easy to design and specify simple survey questions, but there
+should be enough power and flexibility in the language for users to define 
+their own question types and formats
+\item It should be easy to generate artifacts that are helpful for 
+survey deployment: a paper-based survey via LaTeX and possibly a web-based 
+interface via HTML and JavaScript
+\item Primitive data structures should be amenable to statistical analysis and
+manipulation and it should be straightforward to perform common statistical 
+operations on survey results
+\item (This is a stretch) I got the original idea from a friend of mine, who is
+writing a proposal to do research in India. Her research project hinges on administering 
+surveys to Tibetans who have taken refuge there, many of whom have limited English
+skills. It would \textit{nice} if she could write the survey in both English 
+and Tibetan and then at compile time choose what language to render the survey in
+\end{enumerate}
+
+\item To my knowledge, there is no existing programming language for specifying,
+generating, and analyzing research surveys. However, there are several software 
+programs and web services for survey generation; two well-known ones are 
+Qualtrix and Survey Monkey. These products may be easy to use but (anecdotally) lack the
+flexibility and control needed to define some custom question types or survey 
+structures. Additionally, users are limited to the features included in the 
+software packages.
+
+\item Features: 
+\begin{enumerate}[i)]
+\item Simple, declarative constructs for specifying \texttt{survey}s, \texttt{section}s, 
+\texttt{question}s and \texttt{response}s
+\item Variable binding and functions
+\item Constructs for composing new response types and macros for control flow
+\item Control-flow constructs for dependent or conditional questions (e.g. \texttt{if ...then go to...else go to},
+\texttt{case response of ...got to...})
+\item Rendering of surveys in paper format or as a web-based interactive survey
+\item Support for statistical analysis on collected data
+\end{enumerate}
+
+The features set of this language will be just large enough to specify common 
+survey structures and question types and render them in some format, which 
+should be a sufficient first step of the project. Additionally, many surveys 
+have some sort of flow logic: depending on a subject's response to a particular 
+question, she may be directed to a follow-up question or to skip a section of questions. 
+To support this very common structure, there a simple control flow construct is essential.
+
+\item My intuition is that all of the artifact generation will happen in the  
+runtime system. My initial idea is to provide two artifacts for survey deployment: a 
+text version of a survey via LaTeX and a web-based interface via generated 
+HTML and JavaScript.
+
+\item At very least, I will probably need library support for generating 
+LaTeX, HTML markup, and JavaScript in addition to any statistical computation I 
+want to support natively. In any case, a very cursory query into the Hackage
+repository yielded the following libraries as possibly useful: 1) \texttt{HaTex} for 
+generating LaTeX code, 2) \texttt{html} for generating HTML code, and 
+\texttt{statistics} for standard statistical computations.
+
+\item Domain experts will gain a number of benefits from using this language to
+define and generate their surveys. First, users will be able to write a survey 
+just once and generate the survey in multiple formats (text, web). Second, users
+may be able to specify surveys with less text ("code"). For example, if many 
+questions have a the list ["Always", "Sometimes", "Never"] as their available
+responses, this list can be named once and referenced throughout the program.
+There is also the potential for users to have more control over the structure of
+a survey and the types of questions they want to ask. Last, this language may 
+make it trivial to deploy multiple variants of a single survey, e.g. in multiple 
+languages`'.
+
+\item Use cases: see following pages.
+
+\item Evaluation: \\
+    Since one of the goals of this language is to be easy for a non-programmer to learn, the first dimension to evaluate the language is how easy it is for a non-programmer to learn and how willing he is to learn use the language to
+    make surveys over survey software programs. Additionally,
+    given the general principles of code reuse and compositionality, I suspect that many surveys, especially those with repeated types of responses, can be specified with substantially less text than when written out manually. Less text means smaller chance of
+    typographic error and may make modifying the survey easier. Lastly, to support the claim that a language is more flexible or powerful for generating surveys than a traditional survey software application, it would be good to have some examples of survey structures, questions or analyses that are easy to perform in the language but would be difficult or impossible to do with software.
+
+\end{enumerate}
+
+\newpage
+
+\textit{(Note: this section needs fleshing out. These are my preliminary thoughts.)} \\
+
+In the simplest case, a user defines a very short survey with two questions and generates a representation of the survey in printed text and in web markup. The user supplies the content for the questions and responses and uses language constructs to markup the survey structure. \\
+
+\begin{lstlisting}[frame=single]
+
+[begin survey mySurvey]
+    [begin section A]
+
+        [1][question "What is your favorite color?"]
+           [repsonse {"Red", "Blue", "Yellow", "Green"}]
+
+        [2][question "How often do you ride the T?"]
+           [repsonse {"Never", "Sometimes", "Often", "Always"}]
+
+    [end section]
+[end survey]
+
+main:
+    make mySurvey
+\end{lstlisting}
+
+\newpage
+This code snippet shows what a simple control sequence might look like and how common response patterns might be
+leveraged to reduce code length. \\
+
+\begin{lstlisting}[frame=single]
+
+howFrequent = {"Never", "Sometimes", "Often", "Always"}
+
+[begin survey mySurvey]
+
+    [1][question "How often do you brush your teeth?"]
+       [repsonse howFrequent]
+       if response > "Sometimes" then go to [3]
+
+    [2][question "How often do you ride the T?"]
+       [repsonse howFrequent]
+
+    [3][question "Have you ever seen the movie 'The Mighty
+        Ducks'?"]
+       [repsonse {"Yes", "No"}]
+
+[end survey]
+
+main:
+    make mySurvey
+\end{lstlisting}
+
+
+
+
+\end{document}
