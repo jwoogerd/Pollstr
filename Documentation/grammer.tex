@@ -16,17 +16,25 @@
 
 \begin{grammar}
 
-    <survey>     ::= "survey" 
+    <survey>     ::= "survey"  <delc>* <surveyItem>* "end"
 
-    <question>   ::= "question" <identifier> <stringLit> <response>
+    <delc>       ::= <questDelc> | <respDecl>
 
-    <response>   ::= "response"
+    <surveyItem> ::= "question" <question> "response" <response>
+
+    <respDecl>   ::= "response" <identifier> "=" <respExp>
+
+    <questDecl>  ::= "question" <identifier> "=" <questExp>
+
+    <respExp>    ::= "{" <literal> ("," <literal>)* "}"
+
+    <questExp>    ::= <stringLit>
+
+    <question>   ::= <identifier> <questExp> |  <identifier>
+
+    <response>   ::= <respExp> | <identifier>
 
     <literal>    ::= <charLit> | <stringLit> | <intLit>
-
-    <upper>      ::= <identifier> with capitalized first character
-
-    <lower>      ::= <identifier> with lowercase first character
 
     <charLit>    ::=  As defined in Text.Parsec.Token
 
