@@ -5,7 +5,7 @@
 
 \title{Pollstr Grammar}
 \author{Jayme Woogerd}
-\date{October 28, 2014}
+\date{October 29, 2014}
 
 \setlength{\grammarindent}{6em}
 
@@ -20,7 +20,7 @@
 
     <delc>       ::= <questDelc> | <respDecl>
 
-    <surveyItem> ::= "question" <question> "response" <response>
+    <surveyItem> ::= "question" <whitespace> <question> <whitespace> "response" <whitespace> <response>
 
     <respDecl>   ::= "response" <identifier> "=" <respExp>
 
@@ -30,7 +30,7 @@
 
     <questExp>    ::= <stringLit>
 
-    <question>   ::= <identifier> <questExp> |  <identifier>
+    <question>   ::= <identifier> <whitespace> <questExp> |  <identifier>
 
     <response>   ::= <respExp> | <identifier>
 
