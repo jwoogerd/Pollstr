@@ -1,12 +1,9 @@
-{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
-
-module Examples.First where
-import Language.Pollstr_syntax
+--module Examples.First where
+--import Language.Pollstr_syntax
 
 ---
-[pollstr|  |]
 
-[pollstr| survey mySurvey
+"survey mySurvey
 
     response howFrequent = {"Never", "Sometimes", "Often", "Always"}
 
@@ -17,4 +14,4 @@ import Language.Pollstr_syntax
     question ducks: "Have you ever seen the movie 'The Mighty Ducks'?" 
                     {"Yes", "No"}
 
-end mySurvey |]
+end mySurvey"

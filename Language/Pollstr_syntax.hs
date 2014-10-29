@@ -8,7 +8,7 @@ data Question   = Question String deriving Show
 
 data Response   = Response [String] deriving Show
 
-data Decl       = QuestDelc (ID, Question) 
+data Decl       = QuestDecl (ID, Question) 
                 | RespDecl (ID, Response) deriving Show
 
 data SurveyItem = SurveyItem (ID, Question, Response) deriving Show
