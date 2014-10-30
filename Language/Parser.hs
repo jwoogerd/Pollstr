@@ -92,6 +92,8 @@ survey = do
     return $ Survey (id, decls, items) 
     <?> "survey"
 
+
+{- Borrowed from PADS parser -}
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
   { reservedOpNames = ["{", "}", ","],
