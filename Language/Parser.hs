@@ -1,48 +1,70 @@
 
+module Language.Parser where
+
 import Language.Pollstr_syntax
 
-import Text.Parsec
 import Text.ParserCombinators.Parsec
-
 import qualified Text.Parsec.String as PS
-import qualified Text.Parsec.Prim as PP
 import qualified Text.Parsec.Token as PT
 
 import Text.ParserCombinators.Parsec.Language (haskellStyle, reservedOpNames, reservedNames)
-import Control.Monad
 
 parseQ :: String -> Either ParseError Question
 parseQ = parse question "(unknown)"
 
 question :: PS.Parser Question 
-question = do 
+question = qlit <|> qvar
+
+qvar :: PS.Parser Question 
+qvar = do 
+    id <- identifier 
+    return $ Qvar id
+    <?> "question variable"
+
+qlit :: PS.Parser Question 
+qlit = do 
     q <- stringLiteral
     return $ Question q
-    <?> "question"
+    <?> "literal question (string)"
 
 parseR :: String -> Either ParseError Response
 parseR = parse response "(unknown)"
 
-response :: PS.Parser Response
-response = do 
+response :: PS.Parser Response 
+response = rlit <|> rvar
+
+rvar :: PS.Parser Response
+rvar = do 
+    id <- identifier 
+    return $ Rvar id
+    <?> "response variable"
+
+rlit :: PS.Parser Response
+rlit = do 
     rs <- braces $ commaSep stringLiteral
     return $ Response rs
-    <?> "response"
+    <?> "literal response"
 
-parseS :: String -> Either ParseError SurveyItem 
-parseS = parse surveyItem "(unknown)"
+parseI :: String -> Either ParseError Item 
+parseI = parse item "(unknown)"
 
-surveyItem :: PS.Parser SurveyItem
-surveyItem = do 
-    reserved "question"
-    whiteSpace
+itemID :: PS.Parser ID
+itemID = do
+    oneOf "Q"
     id <- identifier
+    return id
+    <?> "item identifier to start with 'Q'"
+
+item :: PS.Parser Item
+item = do 
+    id <- itemID
+    reserved ":"
     whiteSpace
     quest <- question
     whiteSpace
     resp <- response
-    return $ SurveyItem (id, quest, resp)
-    <?> "survey item"
+    return $ Item (id, quest, resp)
+    <?> "item statement"
 
 parseRS:: String -> Either ParseError Decl
 parseRS = parse respDecl "(unknown)"
@@ -78,25 +100,37 @@ questDecl = do
 decl :: PS.Parser Decl
 decl = questDecl <|> respDecl
 
+statement :: PS.Parser Statement
+statement = do
+    d <- decl 
+    return $ DeclS d
+    <|> 
+    do
+    i <- item
+    return $ ItemS i
+    <?> "statement"
+
 parseSurvey :: String -> Either ParseError Survey
 parseSurvey = parse survey "(unknown)"
 
 survey = do
     reserved "survey"
     whiteSpace
-    id <- identifier
+    idStart <- identifier
     whiteSpace
-    decls <- many decl
-    items <- many surveyItem
+    statements <- many statement
     reserved "end"
-    return $ Survey (id, decls, items) 
+    whiteSpace
+    idEnd <- identifier
+    return $ Survey (idStart, statements) 
     <?> "survey"
 
 
-{- Borrowed from PADS parser -}
+{- lexer borrowed from PADS parser -}
+
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
-  { reservedOpNames = ["{", "}", ","],
+  { reservedOpNames = ["{", "}", ",", ":"],
     reservedNames   = ["question", "response", "survey", "end"]})
 
 whiteSpace    = PT.whiteSpace    lexer
@@ -107,10 +141,3 @@ stringLiteral = PT.stringLiteral lexer
 reservedOp    = PT.reservedOp    lexer
 commaSep      = PT.commaSep      lexer
 braces        = PT.braces        lexer
-
-brackets      = PT.brackets    lexer
-operator      = PT.operator    lexer
-charLiteral   = PT.charLiteral lexer
-integer       = PT.integer     lexer
-parens        = PT.parens      lexer
-

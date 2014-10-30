@@ -16,7 +16,7 @@
 
 \begin{grammar}
 
-    <survey>     ::= "survey"  <whitespace> <identifier> <statement>* "end" <whitespace> <identifier>
+    <survey>     ::= "survey"  <whitespace> <upper> <statement>* "end" <whitespace> <upper>
 
     <statement>  ::= <decl> | <item>
 
@@ -38,6 +38,8 @@
 
     <itemID>     ::= "Q"<lower>
 
+    <upper> ::= <identifier> with capitalized first character
+    
     <lower>      ::= <identifier> with lowercase first character
 
     <stringLit>  ::= As defined in Text.Parsec.Token
