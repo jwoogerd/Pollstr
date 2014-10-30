@@ -5,7 +5,7 @@
 
 \title{Pollstr Grammar}
 \author{Jayme Woogerd}
-\date{October 29, 2014}
+\date{November 1, 2014}
 
 \setlength{\grammarindent}{6em}
 
@@ -16,31 +16,31 @@
 
 \begin{grammar}
 
-    <survey>     ::= "survey"  <delc>* <surveyItem>* "end"
+    <survey>     ::= "survey"  <whitespace> <identifier> <statement>* "end" <whitespace> <identifier>
+
+    <statement>  ::= <decl> | <item>
 
     <delc>       ::= <questDelc> | <respDecl>
-
-    <surveyItem> ::= "question" <whitespace> <question> <whitespace> "response" <whitespace> <response>
 
     <respDecl>   ::= "response" <identifier> "=" <respExp>
 
     <questDecl>  ::= "question" <identifier> "=" <questExp>
 
-    <respExp>    ::= "{" <literal> ("," <literal>)* "}"
+    <respExp>    ::= "{" <stringLit> ("," <stringLit>)* "}"
 
-    <questExp>    ::= <stringLit>
+    <questExp>   ::= <stringLit>
 
-    <question>   ::= <identifier> <whitespace> <questExp> |  <identifier>
+    <item>       ::= <itemID>":" <question> <whitespace> <response>
+
+    <question>   ::= <questExp> | <identifier>
 
     <response>   ::= <respExp> | <identifier>
 
-    <literal>    ::= <charLit> | <stringLit> | <intLit>
+    <itemID>     ::= "Q"<lower>
 
-    <charLit>    ::=  As defined in Text.Parsec.Token
+    <lower>      ::= <identifier> with lowercase first character
 
     <stringLit>  ::= As defined in Text.Parsec.Token
-
-    <intLit>     ::= As defined in Text.Parsec.Token
 
     <identifier> ::= As defined in Text.Parsec.Token
 
