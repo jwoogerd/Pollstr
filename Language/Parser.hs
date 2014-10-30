@@ -131,7 +131,7 @@ survey = do
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
   { reservedOpNames = ["{", "}", ",", ":"],
-    reservedNames   = ["question", "response", "survey", "end"]})
+    reservedNames   = ["question", "response", "survey", "section", "end"]})
 
 whiteSpace    = PT.whiteSpace    lexer
 identifier    = PT.identifier    lexer
