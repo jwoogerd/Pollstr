@@ -1,36 +1,32 @@
 module Examples.First where
 
-import Language.Pollstr_syntax
 import Language.Parser
-import Test.HUnit
+import Test.HUnit hiding (test)
+import Test.HUnit.Diff
+import Text.ParserCombinators.Parsec
+import Text.Parsec.Error
 
-first = "survey First \
-\\
-\ response bool = {\"Yes\", \"No\"} \
-\\
-\ Qducks: \"Have you ever seen the movie 'The Mighty Ducks'?\" {\"Yes\", \"No\"} \
-\\
-\ question movie = \"What is your favorite movie?\" \
-\\
-\ end First"
+import Language.Pollstr_syntax
+import Examples.SimpleSurvey
+import Examples.Sections
 
---test = runTestTT tests
---tests = TestList[ TestLabel "QLiteral" qLiteral_test
---                , TestLabel "QVar" qVar_test
---                ]
+test = runTestTT tests
 
+tests = TestList[ TestLabel "SimpleSurvey" simple_test,
+               --   TestLabel "Sections" sections_test
+                ]
 
---qLiteral_result = 
---    parseQ "\"Have you ever seen the movie 'The Mighty Ducks'?\""
---qLiteral_expects = Right(Question "Have you ever seen the movie 'The Mighty Ducks'?")
---qLiteral_test = TestCase(assertEqual "QLiteral" qLiteral_expects qLiteral_result)
+-- Testing the simplest survey
+simple_expected = parse survey "" simpleSurveyText 
+simple_result = Right simpleSurveyAST
+simple_test = mkTestCase simple_expected simple_result
 
---qVar_result = parseQ "myQuestion"
---qVar_expects = Qvar "myQuestion"
---qVar_test = TestCase(assertEqual "QVar" qVar_expects qVar_result)
+--sections_expected = parse survey "" sectionsText 
+--sections_result = Right sectionsAST
+--sections_test = mkTestCase sections_expected sections_result
 
+instance Eq ParseError where
+  (==) e1 e2 = (errorPos e1 == errorPos e2) &&
+               (errorMessages e1 == errorMessages e2)
 
-
---declarations = [RespDecl("howFrequent", Response ["Never", "Sometimes", "Often", "Always"])]
---items = [Item("teeth", Question "How often do you brush your teeth?", Response ["Never", "Sometimes", "Often", "Always"] )]
---test = Survey("mySurvey", declarations, items)
+mkTestCase expected seen = TestCase(expected @=? seen)

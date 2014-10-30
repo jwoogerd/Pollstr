@@ -6,11 +6,9 @@ import Language.Pollstr_syntax
 import Text.ParserCombinators.Parsec
 import qualified Text.Parsec.String as PS
 import qualified Text.Parsec.Token as PT
+import Data.Monoid(mconcat)
 
 import Text.ParserCombinators.Parsec.Language (haskellStyle, reservedOpNames, reservedNames)
-
-parseQ :: String -> Either ParseError Question
-parseQ = parse question "(unknown)"
 
 question :: PS.Parser Question 
 question = qlit <|> qvar
@@ -100,15 +98,13 @@ questDecl = do
 decl :: PS.Parser Decl
 decl = questDecl <|> respDecl
 
-statement :: PS.Parser Statement
-statement = do
-    d <- decl 
-    return $ DeclS d
-    <|> 
-    do
-    i <- item
-    return $ ItemS i
-    <?> "statement"
+-- See http://stackoverflow.com/questions/8758460
+decl', item' :: Parser ([Decl], [Item])
+decl' = fmap (\x -> ([x], [])) decl
+item' = fmap (\x -> ([], [x])) item
+
+statements :: PS.Parser ([Decl], [Item])
+statements = fmap mconcat . many . choice $ [decl', item']
 
 parseSurvey :: String -> Either ParseError Survey
 parseSurvey = parse survey "(unknown)"
@@ -118,11 +114,11 @@ survey = do
     whiteSpace
     idStart <- identifier
     whiteSpace
-    statements <- many statement
+    (decls, items) <- statements
     reserved "end"
     whiteSpace
     idEnd <- identifier
-    return $ Survey (idStart, statements) 
+    return $ Survey (idStart, decls, items, []) 
     <?> "survey"
 
 
