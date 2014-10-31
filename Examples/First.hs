@@ -15,7 +15,7 @@ import Examples.Sections
 test = runTestTT tests
 
 tests = TestList[ TestLabel "SimpleSurvey" simple_test
-                ,  TestLabel "Sections" sections_test
+                , TestLabel "Sections" sections_test
                 ]
 
 -- Testing the simplest survey

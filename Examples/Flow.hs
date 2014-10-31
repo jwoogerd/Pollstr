@@ -15,7 +15,7 @@ flowText = unlines [
     "       Qhair: \"How often do you brush your hair?\" howFrequent"
     "",
     "       Qbrand: \"What brand of toothpaste do you use?\"",
-    "               {\"Colgage\", \"Crest\", \"Other\"}"
+    "               {\"Colgate\", \"Crest\", \"Other\"}"
     "",
     "   end hygiene"
     "end Flow"]
