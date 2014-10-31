@@ -2,7 +2,7 @@ module Examples.First where
 
 import Language.Parser
 import Test.HUnit hiding (test)
-import Test.HUnit.Diff
+--import Test.HUnit.Diff
 import Text.ParserCombinators.Parsec
 import Text.Parsec.Error
 
