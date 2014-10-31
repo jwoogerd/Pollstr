@@ -1,4 +1,3 @@
-
 module Language.Parser where
 
 import Language.Pollstr_syntax
@@ -133,9 +132,9 @@ section :: PS.Parser Section
 section = do
     reserved "section"
     whiteSpace
-    id <- lowerID
+    id <- upperID
     (decls, items, sections) <- insides
-    idEnd <- lowerID
+    idEnd <- upperID
     return $ Section (id, decls, items, sections)
     <?> "section"
 

@@ -20,13 +20,13 @@
 
     <statement>  ::= <decl> | <item>
 
-    <section>    ::= "section" <whitespace> <lower> <statement>* <section>* "end" <whitespace> <lower>
+    <section>    ::= "section" <whitespace> <upper> <statement>* <section>* "end" <whitespace> <lower>
 
     <delc>       ::= <questDelc> | <respDecl>
 
-    <respDecl>   ::= "response" <identifier> "=" <respExp>
+    <respDecl>   ::= "response" <lower> "=" <respExp>
 
-    <questDecl>  ::= "question" <identifier> "=" <questExp>
+    <questDecl>  ::= "question" <lower> "=" <questExp>
 
     <respExp>    ::= "{" (<stringLit>) ("," <stringLit>)* "}"
 
@@ -34,9 +34,9 @@
 
     <item>       ::= <itemID>":" <question> <whitespace> <response> (<whitespace> <skipTo>)
 
-    <question>   ::= <questExp> | <identifier>
+    <question>   ::= <questExp> | <lower>
 
-    <response>   ::= <respExp> | <identifier>
+    <response>   ::= <respExp> | <lower>
 
     <skipTo>     ::= "skipTo" "(" <itemID>"," <response> ")"
 

@@ -2,12 +2,20 @@ module Examples.Flow where
 
 import Language.Pollstr_syntax
 
+{- 
+    This example shows what a simple flow control construct looks like -- 
+    skipping to an item or section based on the response. Right now, you 
+    pass to the function 'skipTo' the identifier of the item or section to 
+    go to and the responses for which the skip should be executed. This is
+    still a work in progress. 
+-}
+
 flowText = unlines [
     "survey Flow",
     "",
     "   response howFrequent = {\"Never\", \"Sometimes\", \"Often\", \"Always\"}",
     "",
-    "   section hygiene",
+    "   section Hygiene",
     "",
     "       Qteeth: \"How often do you brush your teeth?\" howFrequent",
     "           skipTo(Qbrand, {\"Often\", \"Always\"})",
@@ -17,7 +25,7 @@ flowText = unlines [
     "       Qbrand: \"What brand of toothpaste do you use?\"",
     "               {\"Colgate\", \"Crest\", \"Other\"}",
     "",
-    "   end hygiene",
+    "   end Hygiene",
     "end Flow"]
 
 
@@ -33,4 +41,4 @@ hygieneItems = [
         Response ["Colgate","Crest","Other"], None)]
 
 flowAST = Survey ("Flow", topLevelDecls, [],
-                 [Section ("hygiene", [], hygieneItems, [])])
+                 [Section ("Hygiene", [], hygieneItems, [])])
