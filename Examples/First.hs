@@ -9,6 +9,7 @@ import Text.Parsec.Error
 import Language.Pollstr_syntax
 import Examples.SimpleSurvey
 import Examples.Sections
+import Examples.Flow
 
 {- Pollstr testing suite -}
 
@@ -16,6 +17,7 @@ test = runTestTT tests
 
 tests = TestList[ TestLabel "SimpleSurvey" simple_test
                 , TestLabel "Sections" sections_test
+                , TestLabel "Flow" flow_test
                 ]
 
 -- Testing the simplest survey
@@ -27,6 +29,12 @@ simple_test = mkTestCase simple_expected simple_result
 sections_result = parse survey "" sectionsText 
 sections_expected = Right sectionsAST
 sections_test = mkTestCase sections_expected sections_result
+
+-- Testing flow control with skips
+flow_result = parse survey "" flowText 
+flow_expected = Right flowAST
+flow_test = mkTestCase flow_expected flow_result
+
 
 {-
     testing infrastructure (borrowed from Will and Andrew)

@@ -28,15 +28,17 @@
 
     <questDecl>  ::= "question" <identifier> "=" <questExp>
 
-    <respExp>    ::= "{" <stringLit> ("," <stringLit>)* "}"
+    <respExp>    ::= "{" (<stringLit>) ("," <stringLit>)* "}"
 
     <questExp>   ::= <stringLit>
 
-    <item>       ::= <itemID>":" <question> <whitespace> <response>
+    <item>       ::= <itemID>":" <question> <whitespace> <response> (<whitespace> <skipTo>)
 
     <question>   ::= <questExp> | <identifier>
 
     <response>   ::= <respExp> | <identifier>
+
+    <skipTo>     ::= "skipTo" "(" <itemID>"," <response> ")"
 
     <itemID>     ::= "Q"<lower>
 

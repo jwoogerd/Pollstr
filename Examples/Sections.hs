@@ -39,9 +39,9 @@ topLevelDecls = [
 
 sections = [
     Section ("hygiene", [], [Item ("teeth",
-        Question "How often do you brush your teeth?", Rvar "howFrequent")], []),
+        Question "How often do you brush your teeth?", Rvar "howFrequent", None)], []),
     Section ("transportation", [], [Item ("train", 
-        Qvar "train", Rvar "howFrequent")], nested)]
+        Qvar "train", Rvar "howFrequent", None)], nested)]
 
 nested = [Section ("nested", [QuestDecl ("dogcat", 
     Question "Do your prefer dogs or cats?")],[],[])]

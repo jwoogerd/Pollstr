@@ -50,6 +50,18 @@ itemID = do
     return id
     <?> "item identifier to start with 'Q'"
 
+skipTo :: PS.Parser Skip
+skipTo = do
+    reserved "skipTo"
+    (id, resp) <- parens (do 
+        id <- itemID
+        reserved ","
+        resp <- response
+        return (id, resp)
+        )
+    return $ Skip(id, resp)
+    <?> "skipTo application"
+
 item :: PS.Parser Item
 item = do 
     id <- itemID
@@ -58,7 +70,8 @@ item = do
     quest <- question
     whiteSpace
     resp <- response
-    return $ Item (id, quest, resp)
+    skip <- option None skipTo
+    return $ Item (id, quest, resp, skip)
     <?> "item statement"
 
 respDecl :: PS.Parser Decl
@@ -97,26 +110,41 @@ section' = fmap (\x -> ([], [], [x])) section
 statements :: PS.Parser ([Decl], [Item], [Section])
 statements = fmap mconcat . many . choice $ [decl', item', section']
 
-insides :: PS.Parser (String, [Decl], [Item], [Section])
+insides :: PS.Parser ([Decl], [Item], [Section])
 insides = do
-    whiteSpace
-    idStart <- identifier
     (decls, items, sections) <- statements
     reserved "end"
     whiteSpace
-    idEnd <- identifier
-    return (idStart, decls, items, sections)
+    return (decls, items, sections)
+
+upperID :: PS.Parser String
+upperID = do 
+    first <- upper
+    rest <- identifier
+    return (first:rest)
+
+lowerID :: PS.Parser String
+lowerID = do 
+    first <- lower
+    rest <- identifier
+    return (first:rest)
 
 section :: PS.Parser Section
 section = do
     reserved "section"
-    (id, decls, items, sections) <- insides
+    whiteSpace
+    id <- lowerID
+    (decls, items, sections) <- insides
+    idEnd <- lowerID
     return $ Section (id, decls, items, sections)
     <?> "section"
 
 survey = do
     reserved "survey"
-    (id, decls, items, sections) <- insides
+    id <- upperID 
+    whiteSpace
+    (decls, items, sections) <- insides
+    idEnd <- upperID 
     return $ Survey (id, decls, items, sections) 
     <?> "survey"
 
@@ -124,8 +152,8 @@ survey = do
 
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
-  { reservedOpNames = ["{", "}", ",", ":"],
-    reservedNames   = ["question", "response", "survey", "section", "end"]})
+  { reservedOpNames = ["{", "}", "(", ")", ",", ":"],
+    reservedNames   = ["question", "response", "skipTo", "survey", "section", "end"]})
 
 whiteSpace    = PT.whiteSpace    lexer
 identifier    = PT.identifier    lexer
@@ -135,3 +163,4 @@ stringLiteral = PT.stringLiteral lexer
 reservedOp    = PT.reservedOp    lexer
 commaSep      = PT.commaSep      lexer
 braces        = PT.braces        lexer
+parens        = PT.parens        lexer
