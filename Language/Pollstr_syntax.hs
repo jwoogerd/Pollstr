@@ -1,5 +1,7 @@
 module Language.Pollstr_syntax where
 
+{- Pollstr abstract syntax -}
+
 type ID         = String
 
 data Survey     = Survey (ID, [Decl], [Item], [Section]) 
@@ -16,4 +18,3 @@ data Item       = Item (ID, Question, Response) deriving (Show, Eq)
 data Question   = Question String | Qvar ID deriving (Show, Eq)
 
 data Response   = Response [String] | Rvar ID deriving (Show, Eq)
-

@@ -8,7 +8,10 @@ import qualified Text.Parsec.String as PS
 import qualified Text.Parsec.Token as PT
 import Data.Monoid(mconcat)
 
-import Text.ParserCombinators.Parsec.Language (haskellStyle, reservedOpNames, reservedNames)
+import Text.ParserCombinators.Parsec.Language (
+    haskellStyle, reservedOpNames, reservedNames)
+
+{- Pollstr parsing -}
 
 question :: PS.Parser Question 
 question = qlit <|> qvar
@@ -25,9 +28,6 @@ qlit = do
     return $ Question q
     <?> "literal question (string)"
 
-parseR :: String -> Either ParseError Response
-parseR = parse response "(unknown)"
-
 response :: PS.Parser Response 
 response = rlit <|> rvar
 
@@ -42,9 +42,6 @@ rlit = do
     rs <- braces $ commaSep stringLiteral
     return $ Response rs
     <?> "literal response"
-
-parseI :: String -> Either ParseError Item 
-parseI = parse item "(unknown)"
 
 itemID :: PS.Parser ID
 itemID = do
@@ -64,9 +61,6 @@ item = do
     return $ Item (id, quest, resp)
     <?> "item statement"
 
-parseRS:: String -> Either ParseError Decl
-parseRS = parse respDecl "(unknown)"
-
 respDecl :: PS.Parser Decl
 respDecl = do
     reserved "response"
@@ -78,10 +72,6 @@ respDecl = do
     resp <- response
     return $ RespDecl(id, resp)
     <?> "response declaration"
-
-
-parseQS:: String -> Either ParseError Decl
-parseQS = parse questDecl "(unknown)"
 
 questDecl :: PS.Parser Decl
 questDecl = do
@@ -99,28 +89,36 @@ decl :: PS.Parser Decl
 decl = questDecl <|> respDecl
 
 -- See http://stackoverflow.com/questions/8758460
-decl', item' :: Parser ([Decl], [Item])
-decl' = fmap (\x -> ([x], [])) decl
-item' = fmap (\x -> ([], [x])) item
+decl', item', section' :: Parser ([Decl], [Item], [Section])
+decl' = fmap (\x -> ([x], [], [])) decl
+item' = fmap (\x -> ([], [x], [])) item
+section' = fmap (\x -> ([], [], [x])) section
 
-statements :: PS.Parser ([Decl], [Item])
-statements = fmap mconcat . many . choice $ [decl', item']
+statements :: PS.Parser ([Decl], [Item], [Section])
+statements = fmap mconcat . many . choice $ [decl', item', section']
 
-parseSurvey :: String -> Either ParseError Survey
-parseSurvey = parse survey "(unknown)"
-
-survey = do
-    reserved "survey"
+insides :: PS.Parser (String, [Decl], [Item], [Section])
+insides = do
     whiteSpace
     idStart <- identifier
-    whiteSpace
-    (decls, items) <- statements
+    (decls, items, sections) <- statements
     reserved "end"
     whiteSpace
     idEnd <- identifier
-    return $ Survey (idStart, decls, items, []) 
-    <?> "survey"
+    return (idStart, decls, items, sections)
 
+section :: PS.Parser Section
+section = do
+    reserved "section"
+    (id, decls, items, sections) <- insides
+    return $ Section (id, decls, items, sections)
+    <?> "section"
+
+survey = do
+    reserved "survey"
+    (id, decls, items, sections) <- insides
+    return $ Survey (id, decls, items, sections) 
+    <?> "survey"
 
 {- lexer borrowed from PADS parser -}
 
