@@ -12,7 +12,7 @@ maintainer:          jayme.woogerd@tufts.edu
 -- copyright:           
 -- category:            
 build-type:          Simple
--- extra-source-files:  
+-- extra-source-files: Documentation/Pollstr_grammar.pdf
 cabal-version:       >=1.10
 
 library
