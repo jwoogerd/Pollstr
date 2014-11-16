@@ -18,7 +18,7 @@ pollstr = QuasiQuoter (error "parse expression")
                       (error "parse type")
                       pparse
 
-pparse :: String -> TH.Q TH.Dec
+pparse :: String -> TH.Q [TH.Dec]
 pparse input = do
     case P.survey input of
       Left err -> unsafePerformIO $ fail $ show err

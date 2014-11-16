@@ -138,6 +138,7 @@ section = do
     return $ Section (id, decls, items, sections)
     <?> "section"
 
+survey :: PS.Parser Survey
 survey = do
     reserved "survey"
     id <- upperID 

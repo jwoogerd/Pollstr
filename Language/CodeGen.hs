@@ -8,5 +8,5 @@ import Language.Pollstr_syntax as PS
 import Language.Parser
 
 
-make_survey :: Survey -> Q Exp 
-make_survey s = [| s |]
+make_survey :: Survey -> Q [Dec]
+make_survey s = undefined
