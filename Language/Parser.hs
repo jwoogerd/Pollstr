@@ -4,11 +4,30 @@ import Language.Pollstr_syntax
 
 import Text.ParserCombinators.Parsec
 import qualified Text.Parsec.String as PS
-import qualified Text.Parsec.Token as PT
-import Data.Monoid(mconcat)
+import qualified Text.Parsec.Prim   as PP
+import qualified Text.Parsec.Token  as PT
 
 import Text.ParserCombinators.Parsec.Language (
     haskellStyle, reservedOpNames, reservedNames)
+import Text.ParserCombinators.Parsec.Pos (newPos)
+import Data.Monoid (mconcat)
+
+parsePollstrSurvey :: (SourceName, Line, Column) -> String -> Either ParseError Survey
+parsePollstrSurvey (filename, line, column) input =
+    PP.parse s filename input
+    where s = do 
+            setPosition (newPos filename line column)
+            whiteSpace
+            s <- survey
+            whiteSpace
+            eof <|> errorParse
+            return s
+
+-- This function consumes input until the eof marker.
+-- (Borrowed from PADS implementation)
+errorParse = do
+    rest <- manyTill anyToken eof
+    unexpected rest
 
 {- Pollstr parsing -}
 

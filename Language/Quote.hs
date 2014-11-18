@@ -13,13 +13,16 @@ import qualified Language.Parser as P
 
 
 pollstr :: QuasiQuoter
-pollstr = QuasiQuoter (error "parse expression")
+pollstr = QuasiQuoter quoteSurveyExpr
                       (error "parse pattern")
                       (error "parse type")
-                      pparse
+                      (error "parse declaration")
 
-pparse :: String -> TH.Q [TH.Dec]
-pparse input = do
-    case P.survey input of
-      Left err -> unsafePerformIO $ fail $ show err
-      Right x  -> make_survey x
+quoteSurveyExpr :: String -> TH.Q TH.Exp
+quoteSurveyExpr input = do
+    loc <- TH.location
+    let filename    = TH.loc_filename loc
+    let (line, col) = TH.loc_start loc
+    case P.parsePollstrSurvey (filename, line, col) input of
+        Left err -> unsafePerformIO $ fail $ show err
+        Right x  -> make_survey x
