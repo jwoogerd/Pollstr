@@ -77,7 +77,7 @@ skipTo = do
         resp <- response
         return (id, resp)
         )
-    return $ Skip(id, resp)
+    return $ Skip id resp
     <?> "skipTo application"
 
 item :: PS.Parser Item
@@ -89,7 +89,7 @@ item = do
     whiteSpace
     resp <- response
     skip <- option None skipTo
-    return $ Item (id, quest, resp, skip)
+    return $ Item id quest resp skip
     <?> "item statement"
 
 respDecl :: PS.Parser Decl
@@ -101,7 +101,7 @@ respDecl = do
     reserved "="
     whiteSpace
     resp <- response
-    return $ RespDecl(id, resp)
+    return $ RespDecl id resp
     <?> "response declaration"
 
 questDecl :: PS.Parser Decl
@@ -113,7 +113,7 @@ questDecl = do
     reserved "="
     whiteSpace
     quest <- question 
-    return $ QuestDecl(id, quest)
+    return $ QuestDecl id quest
     <?> "question declaration"
 
 decl :: PS.Parser Decl
@@ -154,7 +154,7 @@ section = do
     id <- upperID
     (decls, items, sections) <- insides
     idEnd <- upperID
-    return $ Section (id, decls, items, sections)
+    return $ Section id decls items sections
     <?> "section"
 
 survey :: PS.Parser Survey
@@ -164,7 +164,7 @@ survey = do
     whiteSpace
     (decls, items, sections) <- insides
     idEnd <- upperID 
-    return $ Survey (id, decls, items, sections) 
+    return $ Survey id decls items sections
     <?> "survey"
 
 {- lexer borrowed from PADS parser -}

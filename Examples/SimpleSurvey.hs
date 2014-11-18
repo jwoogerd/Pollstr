@@ -21,7 +21,7 @@ simpleSurveyText = unlines [
     "",
     "end Simple"]
 
-simpleSurveyAST = Survey ("Simple", [RespDecl ("bool",Response ["Yes","No"]),
-    QuestDecl ("movie",Question "What is your favorite movie?")],
-    [Item ("ducks",Question "Have you ever seen the movie 'The Mighty Ducks'?",
-    Response ["Yes","No"], None)],[])
+simpleSurveyAST = Survey "Simple" [RespDecl "bool" (Response ["Yes","No"]),
+    QuestDecl "movie" (Question "What is your favorite movie?")]
+    [Item "ducks" (Question "Have you ever seen the movie 'The Mighty Ducks'?")
+    (Response ["Yes","No"]) None] []

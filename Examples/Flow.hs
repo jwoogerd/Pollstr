@@ -30,15 +30,15 @@ flowText = unlines [
 
 
 topLevelDecls = 
-    [RespDecl ("howFrequent", Response ["Never","Sometimes","Often","Always"])]
+    [RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"])]
 
 hygieneItems = [
-    Item ("teeth", Question "How often do you brush your teeth?", 
-         Rvar "howFrequent", Skip ("brand", Response ["Often", "Always"])),
-    Item ("hair", Question "How often do you brush your hair?", 
-         Rvar "howFrequent",None),
-    Item ("brand", Question "What brand of toothpaste do you use?", 
-        Response ["Colgate","Crest","Other"], None)]
+    Item "teeth" (Question "How often do you brush your teeth?")
+         (Rvar "howFrequent") (Skip "brand" (Response ["Often", "Always"])),
+    Item "hair" (Question "How often do you brush your hair?")
+         (Rvar "howFrequent") None,
+    Item "brand" (Question "What brand of toothpaste do you use?")
+        (Response ["Colgate","Crest","Other"]) None]
 
-flowAST = Survey ("Flow", topLevelDecls, [],
-                 [Section ("Hygiene", [], hygieneItems, [])])
+flowAST = Survey "Flow" topLevelDecls [] [Section "Hygiene" [] hygieneItems []]
+

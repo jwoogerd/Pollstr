@@ -3,7 +3,7 @@ module Examples.First where
 
 import Language.Parser
 import Test.HUnit hiding (test)
---import Test.HUnit.Diff
+import Test.HUnit.Diff
 import Text.ParserCombinators.Parsec
 import Text.Parsec.Error
 
@@ -26,7 +26,7 @@ first = [pollstr|
     survey Simple
         response bool = {"Yes", "No"}
         Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" {"Yes", "No"}
-    question movie = "What is your favorite movie?"
+        question movie = "What is your favorite movie?"
     end Simple
 |]
 

@@ -42,16 +42,17 @@ sectionsText = unlines [
 {- Expected Pollstr abstract syntax -}
 
 topLevelDecls = [
-    RespDecl ("howFrequent", Response ["Never","Sometimes","Often","Always"]),
-    QuestDecl ("train", Question "How often do you ride the T?")]
+    RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"]),
+    QuestDecl "train" (Question "How often do you ride the T?")]
 
-sections = [
-    Section ("Hygiene", [], [Item ("teeth",
-        Question "How often do you brush your teeth?", Rvar "howFrequent", None)], []),
-    Section ("Transportation", [], [Item ("train", 
-        Qvar "train", Rvar "howFrequent", None)], nested)]
+sections = [section1, section2]
+section1 = Section "Hygiene" [] 
+    [Item "teeth" (Question "How often do you brush your teeth?")
+                  (Rvar "howFrequent") None] []
+section2 = Section "Transportation" []
+    [Item "train" (Qvar "train") (Rvar "howFrequent") None] nested
 
-nested = [Section ("Nested", [QuestDecl ("dogcat", 
-    Question "Do your prefer dogs or cats?")],[],[])]
+nested = [Section "Nested" [QuestDecl "dogcat" 
+    (Question "Do your prefer dogs or cats?")] [] []]
 
-sectionsAST = Survey ("Sections", topLevelDecls, [], sections) 
+sectionsAST = Survey "Sections" topLevelDecls [] sections
