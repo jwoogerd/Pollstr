@@ -1,22 +1,27 @@
+{-# LANGUAGE DeriveDataTypeable #-}
+
 module Language.Pollstr_syntax where
 
+import Data.Data
 {- Pollstr abstract syntax -}
 
 type ID         = String
 
 data Survey     = Survey (ID, [Decl], [Item], [Section]) 
-                  deriving (Show, Eq)
+                  deriving (Show, Eq, Typeable, Data)
 
 data Section    = Section (ID, [Decl], [Item], [Section]) 
-                  deriving (Show, Eq)
+                  deriving (Show, Eq, Typeable, Data)
 
 data Decl       = QuestDecl (ID, Question) 
-                | RespDecl (ID, Response) deriving (Show, Eq)
+                | RespDecl (ID, Response) deriving (Show, Eq, Typeable, Data)
 
-data Item       = Item (ID, Question, Response, Skip) deriving (Show, Eq)
+data Item       = Item (ID, Question, Response, Skip) 
+                  deriving (Show, Eq, Typeable, Data)
 
-data Question   = Question String | Qvar ID deriving (Show, Eq)
+data Question   = Question String | Qvar ID deriving (Show, Eq, Typeable, Data)
 
-data Response   = Response [String] | Rvar ID deriving (Show, Eq)
+data Response   = Response [String] | Rvar ID
+                  deriving (Show, Eq, Typeable, Data)
 
-data Skip       = Skip (ID, Response) | None deriving (Show, Eq)
+data Skip       = Skip (ID, Response) | None deriving (Show, Eq, Typeable, Data)
