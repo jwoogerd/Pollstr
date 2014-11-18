@@ -5,7 +5,7 @@ module Language.Latex_test where
 import Text.LaTeX
 
 import Language.Parser
-import Language.Pollstr_syntax
+import Language.Syntax
 
 preamble :: Monad m => String -> String -> LaTeXT_ m
 preamble _title _author = 

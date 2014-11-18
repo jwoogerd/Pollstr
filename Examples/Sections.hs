@@ -1,6 +1,6 @@
 module Examples.Sections where
 
-import Language.Pollstr_syntax
+import Language.Syntax
 
 {-
     This example shows how survey sections will work. There can be any number

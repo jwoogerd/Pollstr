@@ -1,6 +1,6 @@
 module Examples.SimpleSurvey where
 
-import Language.Pollstr_syntax
+import Language.Syntax
 
 {- 
     This is the simplest example of a complete survey. Declarations and what 

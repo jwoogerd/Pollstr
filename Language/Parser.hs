@@ -1,6 +1,6 @@
 module Language.Parser where
 
-import Language.Pollstr_syntax
+import Language.Syntax
 
 import Text.ParserCombinators.Parsec
 import qualified Text.Parsec.String as PS

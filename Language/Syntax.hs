@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-module Language.Pollstr_syntax where
+module Language.Syntax where
 
 import Data.Data
 {- Pollstr abstract syntax -}

@@ -1,6 +1,6 @@
 module Examples.Flow where
 
-import Language.Pollstr_syntax
+import Language.Syntax
 
 {- 
     This example shows what a simple flow control construct looks like -- 

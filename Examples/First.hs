@@ -7,7 +7,7 @@ import Test.HUnit hiding (test)
 import Text.ParserCombinators.Parsec
 import Text.Parsec.Error
 
-import Language.Pollstr_syntax
+import Language.Syntax
 import Language.Quote
 import Examples.SimpleSurvey
 import Examples.Sections
