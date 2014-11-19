@@ -10,15 +10,6 @@ import Examples.SimpleSurvey
 import Language.Parser
 import Language.Syntax
 
---preamble :: Monad m => String -> String -> LaTeXT_ m
---preamble _title _author = 
---    documentclass [] article
---    <> title (fromString _title)
---    <> author (fromString _author)
-
---body :: Monad m => Question -> LaTeXT_ m
---body (Question q) = document (maketitle <> (fromString q))
-
 preamble :: Monad m => LaTeXT_ m
 preamble = documentclass [] article
 
@@ -31,10 +22,11 @@ surveyL (Survey id decls items sections) =
 itemsL :: Monad m => [Decl] -> [Item] -> LaTeXT_ m
 itemsL decls items = 
     let mkItem (Item id quest resp skp) = 
-            (questionL quest decls)
+            LT.item Nothing <> questionL quest decls
+            <> newline
             <> responseL resp decls
             <> skipL skp decls
-    in mconcat $ map mkItem items
+    in enumerate (mconcat $ map mkItem items)
 
 questionL :: Monad m => Question -> [Decl] -> LaTeXT_ m
 questionL (Question q) _  = fromString q
