@@ -22,7 +22,7 @@ tests = TestList[ TestLabel "SimpleSurvey" simple_test
                 , TestLabel "Flow" flow_test
                 ]
 
-first = [pollstr| 
+[pollstr| 
     survey Simple
         response bool = {"Yes", "No"}
         Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" {"Yes", "No"}

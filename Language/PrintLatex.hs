@@ -1,15 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Language.Latex_test where
+module Language.PrintLatex (printLatex) where
 
 import Text.LaTeX hiding (item)
 import qualified Text.LaTeX as LT (item)
 import Data.List(intersperse)
 
-import Examples.SimpleSurvey
-
 import Language.Parser
 import Language.Syntax
+
+printLatex :: Survey -> String -> IO ()
+printLatex s dest = execLaTeXT (surveyL s) >>= renderFile dest
 
 preamble :: Monad m => LaTeXT_ m
 preamble = documentclass [] article
@@ -55,6 +56,3 @@ skipL (Skip id r) decls = fromString "Not implemented"
 
 sectionsL :: Monad m => [Section] -> LaTeXT_ m
 sectionsL = undefined
-
-printLatex :: Survey -> String -> IO ()
-printLatex s dest = execLaTeXT (surveyL s) >>= renderFile dest

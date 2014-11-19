@@ -3,6 +3,8 @@
 module Language.Syntax where
 
 import Data.Data
+import Language.Haskell.TH.Syntax
+import Language.Haskell.TH.Quote
 
 {- Pollstr abstract syntax -}
 
@@ -26,3 +28,7 @@ data Response   = Response [String] | Rvar ID
                   deriving (Show, Eq, Typeable, Data)
 
 data Skip       = Skip ID Response | None deriving (Show, Eq, Typeable, Data)
+
+
+instance Lift Survey where
+    lift s = dataToExpQ (\x -> Nothing) s
