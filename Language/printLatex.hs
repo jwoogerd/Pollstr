@@ -56,5 +56,5 @@ skipL (Skip id r) decls = fromString "Not implemented"
 sectionsL :: Monad m => [Section] -> LaTeXT_ m
 sectionsL = undefined
 
-main :: IO ()
-main = execLaTeXT (surveyL simpleSurveyAST) >>= renderFile "survey.tex"
+printLatex :: Survey -> String -> IO ()
+printLatex s dest = execLaTeXT (surveyL s) >>= renderFile dest
