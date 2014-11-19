@@ -8,5 +8,6 @@ import Language.Haskell.TH.Quote
 import Language.Syntax as PS
 import Language.Parser
 
-make_survey :: Survey -> Q Exp
-make_survey s = dataToExpQ (\x -> Nothing) s
+makeSurveyDecs :: Survey -> Q [Dec]
+makeSurveyDecs s = do
+    return [ValD (LitP (StringL "survey")) (NormalB (LitE (IntegerL 5))) []]
