@@ -15,66 +15,65 @@ import Language.Quote
     constructions. This seems repetitive, but for some reason it seems 
     prudent to keep these two entities distinct.
 -}
+
 [pollstr|
-    survey Sections
+   Response howFrequent = ["Never", "Sometimes", "Often", "Always"]
+   Question train = "How often do you ride the T?"
+   Question dogcat = "Do your prefer dogs or cats?"
 
-       response howFrequent = {"Never", "Sometimes", "Often", "Always"}
-       question train = "How often do you ride the T?"
+    Survey Sections: "This is an example of sections"
 
-       section Hygiene
+       Section Hygiene: "Hygiene"
            Qteeth: "How often do you brush your teeth?" howFrequent
-       end Hygiene
+                   skipTo(Qschool, ["Never"])
+           Qhair: "How often do you brush your hair?" howFrequent
 
-       section Transportation
+       Section Transportation: "Transportation"
            Qtrain: train howFrequent
-
-           section Nested
-               question dogcat = "Do your prefer dogs or cats?"
-           end Nested
-
-       end Transportation
-    end Sections
-|]
+       
+       Section School: "School"
+           Qschool: "How often do you go to school?" howFrequent
+           Qlunch: "What do you eat for lunch?" ["candy", "kale", "other"]
+ |]
 
 sectionsText = unlines [ 
-    "survey Sections",
+    "Response howFrequent = [\"Never\", \"Sometimes\", \"Often\", \"Always\"]",
+    "Question train = \"How often do you ride the T?\"",
+    "Question dogcat = \"Do your prefer dogs or cats?\"",
     "",
-    "   response howFrequent = {\"Never\", \"Sometimes\", \"Often\", \"Always\"}",
-    "   question train = \"How often do you ride the T?\"",
-    "",
-    "   section Hygiene",
-    "",
+    "Survey Sections: \"This is an example of sections\"",
+    "   Section Hygiene: \"Hygiene\"",
     "       Qteeth: \"How often do you brush your teeth?\" howFrequent",
+    "           skipTo(Qschool, [\"Never\"])",
+    "       Qhair: \"How often do you brush your hair?\" howFrequent",
     "",
-    "   end Hygiene",
-    "",
-    "   section Transportation",
-    "",
+    "   Section Transportation: \"Transportation\"",
     "       Qtrain: train howFrequent",
     "",
-    "       section Nested",
-    "",
-    "           question dogcat = \"Do your prefer dogs or cats?\"",
-    "",
-    "       end Nested",
-    "",
-    "   end Transportation",
-    "",
-    "end Sections"]
+    "   Section School: \"School\"",
+    "       Qschool: \"How often do you go to school?\" howFrequent",
+    "       Qlunch: \"What do you eat for lunch?\" [\"candy\", \"kale\", \"other\"]"
+    ]
 
 {- Expected Pollstr abstract syntax -}
 
 topLevelDecls = [
     RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"]),
-    QuestDecl "train" (Question "How often do you ride the T?")]
+    QuestDecl "train" (Question "How often do you ride the T?"),
+    QuestDecl "dogcat" (Question "Do your prefer dogs or cats?")]
 
-section1 = Section "Hygiene" [] 
+section1 = Section "Hygiene" "Hygiene" 
     [Item "teeth" (Question "How often do you brush your teeth?")
-                  (Rvar "howFrequent") None] []
-section2 = Section "Transportation" []
-    [Item "train" (Qvar "train") (Rvar "howFrequent") None] nested
+        (Rvar "howFrequent") (Skip "school" (Response ["Never"])),
+    Item "hair" (Question "How often do you brush your hair?")
+    (Rvar "howFrequent") None]
 
-nested = [Section "Nested" [QuestDecl "dogcat" 
-    (Question "Do your prefer dogs or cats?")] [] []]
+section2 = Section "Transportation" "Transportation" 
+    [Item "train" (Qvar "train") (Rvar "howFrequent") None]
 
-sectionsAST = Survey "Sections" topLevelDecls [] [section1, section2]
+section3 = Section "School" "School"
+    [Item "school" (Question "How often do you go to school?") (Rvar "howFrequent") None,
+    Item "lunch"(Question "What do you eat for lunch?") (Response ["candy","kale","other"]) None]
+
+sectionsAST = Survey "Sections" "This is an example of sections"
+    topLevelDecls [section1, section2, section3]

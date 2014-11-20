@@ -57,7 +57,7 @@ rvar = do
 
 rlit :: PS.Parser Response
 rlit = do 
-    rs <- braces $ commaSep stringLiteral
+    rs <- brackets $ commaSep stringLiteral
     return $ Response rs
     <?> "literal response"
 
@@ -94,7 +94,7 @@ item = do
 
 respDecl :: PS.Parser Decl
 respDecl = do
-    reserved "response"
+    reserved "Response"
     whiteSpace
     id <- identifier
     whiteSpace
@@ -106,7 +106,7 @@ respDecl = do
 
 questDecl :: PS.Parser Decl
 questDecl = do
-    reserved "question"
+    reserved "Question"
     whiteSpace
     id <- identifier
     whiteSpace
@@ -119,21 +119,8 @@ questDecl = do
 decl :: PS.Parser Decl
 decl = questDecl <|> respDecl
 
--- See http://stackoverflow.com/questions/8758460
-decl', item', section' :: Parser ([Decl], [Item], [Section])
-decl' = fmap (\x -> ([x], [], [])) decl
-item' = fmap (\x -> ([], [x], [])) item
-section' = fmap (\x -> ([], [], [x])) section
-
-statements :: PS.Parser ([Decl], [Item], [Section])
-statements = fmap mconcat . many . choice $ [decl', item', section']
-
-insides :: PS.Parser ([Decl], [Item], [Section])
-insides = do
-    (decls, items, sections) <- statements
-    reserved "end"
-    whiteSpace
-    return (decls, items, sections)
+decls :: PS.Parser [Decl]
+decls = many decl
 
 upperID :: PS.Parser String
 upperID = do 
@@ -149,30 +136,42 @@ lowerID = do
 
 section :: PS.Parser Section
 section = do
-    reserved "section"
+    reserved "Section"
     whiteSpace
     id <- upperID
-    (decls, items, sections) <- insides
-    idEnd <- upperID
-    return $ Section id decls items sections
+    whiteSpace
+    reserved ":" 
+    whiteSpace
+    title <- stringLiteral
+    items <- manyTill item (lookAhead $ reserved "Section" <|> eof)
+    return $ Section id title items
     <?> "section"
+
+sections :: PS.Parser [Section]
+sections = do
+    items <- many item
+    case items of [] -> many section
+                  is -> return $ [Section "Bare" "" items]
+                  
 
 survey :: PS.Parser Survey
 survey = do
-    reserved "survey"
+    ds <- decls
+    reserved "Survey"
+    whiteSpace
     id <- upperID 
     whiteSpace
-    (decls, items, sections) <- insides
-    idEnd <- upperID 
-    return $ Survey id decls items sections
+    reserved ":"
+    whiteSpace
+    title <- stringLiteral
+    sects <- sections
+    return $ Survey id title ds sects
     <?> "survey"
-
-{- lexer borrowed from PADS parser -}
 
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
-  { reservedOpNames = ["{", "}", "(", ")", ",", ":"],
-    reservedNames   = ["question", "response", "skipTo", "survey", "section", "end"]})
+  { reservedOpNames = ["(", ")", ",", ":"],
+    reservedNames   = ["Question", "Response", "skipTo", "Survey", "Section"]})
 
 whiteSpace    = PT.whiteSpace    lexer
 identifier    = PT.identifier    lexer
@@ -181,5 +180,5 @@ colon         = PT.colon         lexer
 stringLiteral = PT.stringLiteral lexer
 reservedOp    = PT.reservedOp    lexer
 commaSep      = PT.commaSep      lexer
-braces        = PT.braces        lexer
 parens        = PT.parens        lexer
+brackets      = PT.brackets      lexer

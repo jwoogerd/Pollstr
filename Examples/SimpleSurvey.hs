@@ -15,25 +15,23 @@ import Language.Quote
 -}
 
 [pollstr| 
-    survey Simple
-        response bool = {"Yes", "No"}
-        Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" {"Yes", "No"}
-        question movie = "What is your favorite movie?"
-    end Simple
+    Response bool = ["Yes", "No"]
+    Question movie = "What is your favorite movie?"
+
+    Survey Simple: "My first survey"
+        Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" ["Yes", "No"]
 |]
 
 simpleSurveyText = unlines [
-    "survey Simple",
-    "", 
-    "    response bool = {\"Yes\", \"No\"}", -- response declaration
-    "",
-    "    Qducks: \"Have you ever seen the movie 'The Mighty Ducks'?\" {\"Yes\", \"No\"}",
-    "",
-    "    question movie = \"What is your favorite movie?\"", -- question declaration
-    "",
-    "end Simple"]
+    "Response bool = [\"Yes\", \"No\"]", -- response declaration
+    "Question movie = \"What is your favorite movie?\"", -- question declaration
 
-simpleSurveyAST = Survey "Simple" [RespDecl "bool" (Response ["Yes","No"]),
+    "Survey Simple: \"My first survey\"",
+    "",
+    "    Qducks: \"Have you ever seen the movie 'The Mighty Ducks'?\" [\"Yes\", \"No\"]"
+    ]
+
+simpleSurveyAST = Survey "Simple" "My first survey" [RespDecl "bool" (Response ["Yes","No"]),
     QuestDecl "movie" (Question "What is your favorite movie?")]
-    [Item "ducks" (Question "Have you ever seen the movie 'The Mighty Ducks'?")
-    (Response ["Yes","No"]) None] []
+    [Section "Bare" "" [Item "ducks" (Question "Have you ever seen the movie 'The Mighty Ducks'?")
+    (Response ["Yes","No"]) None]]

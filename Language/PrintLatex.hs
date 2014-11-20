@@ -15,9 +15,9 @@ preamble :: Monad m => LaTeXT_ m
 preamble = documentclass [] article
 
 surveyL :: Monad m => Survey -> LaTeXT_ m
-surveyL (Survey id decls items sections) = 
+surveyL (Survey id title decls sections) = 
     preamble
-    <> title (fromString id)
+    <> title (fromString title)
     <> document (itemsL decls items <> sectionsL sections)
 
 itemsL :: Monad m => [Decl] -> [Item] -> LaTeXT_ m

@@ -9,12 +9,12 @@ import Language.Haskell.TH.Quote
 {- Pollstr abstract syntax -}
 
 type ID         = String
+type Title      = String
 
-data Survey     = Survey ID [Decl] [Item] [Section]
+data Survey     = Survey ID Title [Decl] [Section]
                   deriving (Show, Eq, Typeable, Data)
 
-data Section    = Section ID [Decl] [Item] [Section]
-                  deriving (Show, Eq, Typeable, Data)
+data Section    = Section ID Title [Item] deriving (Show, Eq, Typeable, Data)
 
 data Decl       = QuestDecl ID Question
                 | RespDecl ID Response deriving (Show, Eq, Typeable, Data)

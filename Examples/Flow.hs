@@ -12,38 +12,38 @@ import Language.Quote
     go to and the responses for which the skip should be executed. This is
     still a work in progress. 
 -}
+
 [pollstr|
-    survey Flow
-       response howFrequent = {"Never", "Sometimes", "Often", "Always"}
-           Qteeth: "How often do you brush your teeth?" howFrequent
-                    skipTo(Qbrand, {"Often", "Always"})
-           Qhair: "How often do you brush your hair?" howFrequent
-           Qbrand: "What brand of toothpaste do you use?"
-                   {"Colgate", "Crest", "Other"}
-    end Flow
+    Response howFrequent = ["Never", "Sometimes", "Often", "Always"]
+
+    Survey Flow: "A short survey about hygiene"
+        Section Hygiene: "Hygiene"
+
+            Qteeth: "How often do you brush your teeth?" howFrequent
+                    skipTo(Qbrand, ["Often", "Always"])
+
+            Qhair: "How often do you brush your hair?" howFrequent
+
+            Qbrand: "What brand of toothpaste do you use?"
+                    ["Colgate", "Crest", "Other"]
 |]
 
 flowText = unlines [
-    "survey Flow",
+    "Response howFrequent = [\"Never\", \"Sometimes\", \"Often\", \"Always\"]",
     "",
-    "   response howFrequent = {\"Never\", \"Sometimes\", \"Often\", \"Always\"}",
-    "",
-    "   section Hygiene",
+    "Survey Flow: \"A short survey about hygiene\"",
+    "   Section Hygiene: \"Hygiene\"",
     "",
     "       Qteeth: \"How often do you brush your teeth?\" howFrequent",
-    "           skipTo(Qbrand, {\"Often\", \"Always\"})",
+    "           skipTo(Qbrand, [\"Often\", \"Always\"])",
     "",
     "       Qhair: \"How often do you brush your hair?\" howFrequent",
     "",
     "       Qbrand: \"What brand of toothpaste do you use?\"",
-    "               {\"Colgate\", \"Crest\", \"Other\"}",
-    "",
-    "   end Hygiene",
-    "end Flow"]
+    "               [\"Colgate\", \"Crest\", \"Other\"]"
+    ]
 
-
-topLevelDecls = 
-    [RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"])]
+topLevelDecls = [RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"])]
 
 hygieneItems = [
     Item "teeth" (Question "How often do you brush your teeth?")
@@ -53,5 +53,6 @@ hygieneItems = [
     Item "brand" (Question "What brand of toothpaste do you use?")
         (Response ["Colgate","Crest","Other"]) None]
 
-flowAST = Survey "Flow" topLevelDecls [] [Section "Hygiene" [] hygieneItems []]
+flowAST = Survey "Flow" "A short survey about hygiene" 
+         topLevelDecls [Section "Hygiene" "Hygiene" hygieneItems]
 
