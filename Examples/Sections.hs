@@ -1,6 +1,9 @@
+{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+
 module Examples.Sections where
 
 import Language.Syntax
+import Language.Quote
 
 {-
     This example shows how survey sections will work. There can be any number
@@ -12,6 +15,26 @@ import Language.Syntax
     constructions. This seems repetitive, but for some reason it seems 
     prudent to keep these two entities distinct.
 -}
+[pollstr|
+    survey Sections
+
+       response howFrequent = {"Never", "Sometimes", "Often", "Always"}
+       question train = "How often do you ride the T?"
+
+       section Hygiene
+           Qteeth: "How often do you brush your teeth?" howFrequent
+       end Hygiene
+
+       section Transportation
+           Qtrain: train howFrequent
+
+           section Nested
+               question dogcat = "Do your prefer dogs or cats?"
+           end Nested
+
+       end Transportation
+    end Sections
+|]
 
 sectionsText = unlines [ 
     "survey Sections",
@@ -45,7 +68,6 @@ topLevelDecls = [
     RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"]),
     QuestDecl "train" (Question "How often do you ride the T?")]
 
-sections = [section1, section2]
 section1 = Section "Hygiene" [] 
     [Item "teeth" (Question "How often do you brush your teeth?")
                   (Rvar "howFrequent") None] []
@@ -55,4 +77,4 @@ section2 = Section "Transportation" []
 nested = [Section "Nested" [QuestDecl "dogcat" 
     (Question "Do your prefer dogs or cats?")] [] []]
 
-sectionsAST = Survey "Sections" topLevelDecls [] sections
+sectionsAST = Survey "Sections" topLevelDecls [] [section1, section2]

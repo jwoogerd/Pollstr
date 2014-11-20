@@ -1,6 +1,9 @@
+{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+
 module Examples.Flow where
 
 import Language.Syntax
+import Language.Quote
 
 {- 
     This example shows what a simple flow control construct looks like -- 
@@ -9,6 +12,16 @@ import Language.Syntax
     go to and the responses for which the skip should be executed. This is
     still a work in progress. 
 -}
+[pollstr|
+    survey Flow
+       response howFrequent = {"Never", "Sometimes", "Often", "Always"}
+           Qteeth: "How often do you brush your teeth?" howFrequent
+                    skipTo(Qbrand, {"Often", "Always"})
+           Qhair: "How often do you brush your hair?" howFrequent
+           Qbrand: "What brand of toothpaste do you use?"
+                   {"Colgate", "Crest", "Other"}
+    end Flow
+|]
 
 flowText = unlines [
     "survey Flow",

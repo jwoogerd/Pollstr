@@ -1,6 +1,9 @@
+{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+
 module Examples.SimpleSurvey where
 
 import Language.Syntax
+import Language.Quote
 
 {- 
     This is the simplest example of a complete survey. Declarations and what 
@@ -10,6 +13,15 @@ import Language.Syntax
     in the future, I plan to expand the response types available.
 
 -}
+
+[pollstr| 
+    survey Simple
+        response bool = {"Yes", "No"}
+        Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" {"Yes", "No"}
+        question movie = "What is your favorite movie?"
+    end Simple
+|]
+
 simpleSurveyText = unlines [
     "survey Simple",
     "", 

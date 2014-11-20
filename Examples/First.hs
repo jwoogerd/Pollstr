@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+
 module Examples.First where
 
 import Language.Parser
@@ -21,14 +22,6 @@ tests = TestList[ TestLabel "SimpleSurvey" simple_test
                 , TestLabel "Sections" sections_test
                 , TestLabel "Flow" flow_test
                 ]
-
-[pollstr| 
-    survey Simple
-        response bool = {"Yes", "No"}
-        Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" {"Yes", "No"}
-        question movie = "What is your favorite movie?"
-    end Simple
-|]
 
 -- Testing the simplest survey
 simple_result = parse survey "" simpleSurveyText 

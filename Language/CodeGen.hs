@@ -10,8 +10,6 @@ import Language.Parser
 import Language.PrintLatex
 import Data.Char (toLower)
 
-import Examples.SimpleSurvey
-
 makeSurveyDecs :: Survey -> Q [Dec]
 makeSurveyDecs survey@(Survey id _ _ _) = do
     s              <- [| survey |]
