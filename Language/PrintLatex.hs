@@ -2,8 +2,8 @@
 
 module Language.PrintLatex (printLatex) where
 
-import Text.LaTeX hiding (item, section)
-import qualified Text.LaTeX as LT (item, section)
+import Text.LaTeX hiding (title, item, section)
+import qualified Text.LaTeX as LT (title, item, section)
 import Data.List(intersperse)
 
 import Language.Syntax
@@ -17,8 +17,15 @@ preamble = documentclass [] article
 surveyL :: Monad m => Survey -> LaTeXT_ m
 surveyL (Survey id title decls sections) = 
     preamble
-    <> title (fromString title)
-    <> document (itemsL decls items <> sectionsL sections)
+    <> LT.title (fromString title)
+    <> document (maketitle <> sectionsL decls sections)
+
+sectionsL :: Monad m => [Decl] -> [Section] -> LaTeXT_ m
+sectionsL decls [] = fromString ""
+sectionsL decls [Section "Bare" "" items] = itemsL decls items
+sectionsL decls (section:rest) = sectionL decls section <> sectionsL decls rest
+    where sectionL decls (Section id title items) =
+            LT.section (fromString title) <> itemsL decls items
 
 itemsL :: Monad m => [Decl] -> [Item] -> LaTeXT_ m
 itemsL decls items = 
@@ -52,10 +59,3 @@ responseL (Rvar rv) decls = case lookup decls of Just r  -> responseL r []
 skipL :: Monad m => Skip -> [Decl] -> LaTeXT_ m
 skipL None _ = fromString ""
 skipL (Skip id r) decls = fromString "Not implemented"
-
-sectionsL :: Monad m => [Section] -> LaTeXT_ m
-sectionsL [] = fromString ""
-sectionsL (section:rest) = sectionL section <> sectionsL rest
-    where sectionL (Section id decls items sections) =
-            LT.section (fromString id) <> itemsL decls items <> sectionsL sections
-

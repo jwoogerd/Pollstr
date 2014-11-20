@@ -34,7 +34,7 @@ import Language.Quote
        Section School: "School"
            Qschool: "How often do you go to school?" howFrequent
            Qlunch: "What do you eat for lunch?" ["candy", "kale", "other"]
- |]
+|]
 
 sectionsText = unlines [ 
     "Response howFrequent = [\"Never\", \"Sometimes\", \"Often\", \"Always\"]",
