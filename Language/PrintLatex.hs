@@ -23,9 +23,9 @@ surveyL (Survey id title decls sections) =
 sectionsL :: Monad m => [Decl] -> [Section] -> LaTeXT_ m
 sectionsL decls [] = fromString ""
 sectionsL decls [Section "Bare" "" items] = itemsL decls items
-sectionsL decls (section:rest) = sectionL decls section <> sectionsL decls rest
-    where sectionL decls (Section id title items) =
-            LT.section (fromString title) <> itemsL decls items
+sectionsL decls sections = enumerate (mconcat $ map sectionL sections)
+    where sectionL (Section id title items) =
+            LT.item Nothing <> textbf (fromString title) <> itemsL decls items
 
 itemsL :: Monad m => [Decl] -> [Item] -> LaTeXT_ m
 itemsL decls items = 
