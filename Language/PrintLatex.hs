@@ -2,8 +2,8 @@
 
 module Language.PrintLatex (printLatex) where
 
-import Text.LaTeX hiding (item)
-import qualified Text.LaTeX as LT (item)
+import Text.LaTeX hiding (item, section)
+import qualified Text.LaTeX as LT (item, section)
 import Data.List(intersperse)
 
 import Language.Syntax
@@ -18,7 +18,7 @@ surveyL :: Monad m => Survey -> LaTeXT_ m
 surveyL (Survey id decls items sections) = 
     preamble
     <> title (fromString id)
-    <> document (itemsL decls items)
+    <> document (itemsL decls items <> sectionsL sections)
 
 itemsL :: Monad m => [Decl] -> [Item] -> LaTeXT_ m
 itemsL decls items = 
@@ -54,4 +54,8 @@ skipL None _ = fromString ""
 skipL (Skip id r) decls = fromString "Not implemented"
 
 sectionsL :: Monad m => [Section] -> LaTeXT_ m
-sectionsL = undefined
+sectionsL [] = fromString ""
+sectionsL (section:rest) = sectionL section <> sectionsL rest
+    where sectionL (Section id decls items sections) =
+            LT.section (fromString id) <> itemsL decls items <> sectionsL sections
+
