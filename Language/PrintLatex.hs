@@ -6,7 +6,6 @@ import Text.LaTeX hiding (item)
 import qualified Text.LaTeX as LT (item)
 import Data.List(intersperse)
 
-import Language.Parser
 import Language.Syntax
 
 printLatex :: Survey -> String -> IO ()

@@ -14,16 +14,19 @@ import Examples.SimpleSurvey
 
 makeSurveyDecs :: Survey -> Q [Dec]
 makeSurveyDecs survey@(Survey id _ _ _) = do
-    s <- [| survey |]
-    let surveyDecl     = genSurveyDecl id s
-        --jprintLatexDecl = genPrintLatexDecl id s
-    return [surveyDecl]
+    s              <- [| survey |]
+    printLatexDecl <- genPrintLatexDecl survey
+    surveyDecl     <- genSurveyDecl id s
+    return [surveyDecl, printLatexDecl]
 
 idToLower :: ID -> String
 idToLower (x:xs) = (toLower x):xs
 
-genSurveyDecl :: ID -> Exp -> Dec
-genSurveyDecl id exp = ValD (VarP (mkName $ idToLower id)) (NormalB exp) []
+genSurveyDecl :: ID -> Exp -> Q Dec
+genSurveyDecl id exp = do 
+    return $ ValD (VarP (mkName $ idToLower id)) (NormalB exp) []
 
---genPrintLatexDecl :: ID -> Exp -> Dec
---genPrintLatexDecl id exp = ValD (VarP (mkName $ idToLower id)) (NormalB exp) []
+genPrintLatexDecl :: Survey -> Q Dec
+genPrintLatexDecl survey@(Survey id _ _ _) = do
+    body <- [| printLatex survey |]
+    return $ ValD (VarP (mkName $ "print" ++ id)) (NormalB body) []
