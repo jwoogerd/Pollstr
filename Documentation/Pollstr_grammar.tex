@@ -16,11 +16,9 @@
 
 \begin{grammar}
 
-    <survey>     ::= "survey"  <upper> <statement>* <section>* "end" <upper>
+    <survey>     ::= "Survey"  <upper>":" <title> <decl>* (<section>* | <item>*)
 
-    <statement>  ::= <decl> | <item>
-
-    <section>    ::= "section" <upper> <statement>* <section>* "end" <lower>
+    <section>    ::= "Section" <upper>":" <title> <item>* 
 
     <delc>       ::= <questDelc> | <respDecl>
 
@@ -28,7 +26,7 @@
 
     <questDecl>  ::= "question" <lower> "=" <questExp>
 
-    <respExp>    ::= "{" (<stringLit>) ("," <stringLit>)* "}"
+    <respExp>    ::= "[" (<stringLit>) ("," <stringLit>)* "]"
 
     <questExp>   ::= <stringLit>
 
