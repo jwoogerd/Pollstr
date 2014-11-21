@@ -12,18 +12,19 @@ maintainer:          jayme.woogerd@tufts.edu
 -- copyright:           
 -- category:            
 build-type:          Simple
--- extra-source-files: Documentation/Pollstr_grammar.pdf
+extra-source-files: Documentation/Pollstr_grammar.pdf, Examples/Latex/simple.tex, Examples/Latex/sections.tex, Examples/Latex/flow.tex, Examples/Latex/simple.pdf, Examples/Latex/sections.pdf, Examples/Latex/flow.pdf
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Examples.First, Examples.Flow, Examples.Sections, Examples.SimpleSurvey, Language.Parser, Language.Syntax, Language.Quote
+  exposed-modules:     Examples.First, Examples.Flow, Examples.Sections, Examples.SimpleSurvey, Language.Parser, Language.Syntax, Language.Quote, Language.CodeGen, Language.PrintLatex
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8, 
                        HUnit >=1.2 && <1.3, 
                        HUnit-Diff >=0.1 && <0.2, 
                        parsec >=3.1 && <3.2,
-                       template-haskell
+                       template-haskell,
+                       HaTeX
 
   -- hs-source-dirs:      
   default-language:    Haskell2010
