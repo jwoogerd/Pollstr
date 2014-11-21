@@ -7,6 +7,7 @@ import qualified Text.LaTeX as LT (title, item, section)
 import Data.List(intersperse)
 
 import Language.Syntax
+import Language.Environment
 
 {-
     This module exports one function, printLatex that, given a Survey and a

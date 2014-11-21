@@ -4,6 +4,7 @@ module Language.CodeGen where
 
 import Language.Haskell.TH 
 import Language.Haskell.TH.Quote
+import qualified Data.Map as Map
 
 import Language.Syntax as PS
 import Language.Parser
@@ -22,5 +23,6 @@ genSurveyDecl id exp = do
 
 genPrintLatexDecl :: Survey -> Q Dec
 genPrintLatexDecl survey@(Survey id _ _ _) = do
+    let env = makeEnv survey
     body <- [| printLatex survey |]
     return $ ValD (VarP (mkName $ "print" ++ id)) (NormalB body) []
