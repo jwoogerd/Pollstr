@@ -20,48 +20,25 @@ import Examples.Flow
 
 test :: IO()
 test = do
-    printSimple "Examples/Test/simple.tex"
-    printFlow "Examples/Test/flow.tex"
-    printSections "Examples/Test/sections.tex"
-    print "Generating survey defined in Examples/SimpleSurvey.hs at 'Examples/Test/simple.tex'"
-    print "Generating survey defined in Examples/Flow.hs at 'Examples/Test/flow.tex'"
-    print "Generating survey defined in Examples/Sections.hs at 'Examples/Test/sections.tex'"
-    print "Generating pdf files"
-    createProcess (shell "cd Examples/Test")
-    createProcess (shell "pdflatex simple.tex >> .temp")
-    createProcess (shell "pdflatex flow.tex >> .temp")
-    createProcess (shell "pdflatex sections.tex >> .temp")
-    --print "Cleaning up"
-    --createProcess (shell "rm .temp *.aux *.log")
+    print "Invoking printSimple and saving output at 'Examples/simple.tex'"
+    printSimple "Examples/simple.tex"
+
+    print "Invoking printFlow and saving output at 'Examples/flow.tex'"
+    printFlow "Examples/flow.tex"
+
+    print "Invoking printSections and saving output at 'Examples/sections.tex'"
+    printSections "Examples/sections.tex"
+
+    print "Generating simple.pdf, flow.pdf, sections.pdf files...and cleaning up"
+    createProcess (shell $ "latexmk -pdf Examples/simple.tex &&" ++
+                           "latexmk -pdf Examples/flow.tex &&" ++ 
+                           "latexmk -pdf Examples/sections.tex && " ++
+                           "mv *.pdf Examples/ && rm *.log *.aux *.fls *.fdb_latexmk .temp*")
+    print "Reference tex and pdf files are located in Examples/Reference\n"
     return ()
---test = runTestTT tests
 
---tests = TestList[ TestLabel "SimpleSurvey" simple_test
---                , TestLabel "Sections" sections_test
---                , TestLabel "Flow" flow_test
---                ]
-
----- Testing the simplest survey
---simple_result = surveySimple
---simple_expected = simpleSurveyAST
---simple_test = mkTestCase simple_expected simple_result
-
----- Testing sections, including nested sections
---sections_result = surveySections
---sections_expected = sectionsAST
---sections_test = mkTestCase sections_expected sections_result
-
----- Testing flow control with skips
---flow_result = surveyFlow
---flow_expected = flowAST
---flow_test = mkTestCase flow_expected flow_result
-
-
-{-
-    testing infrastructure (borrowed from Will and Andrew)
--}
-instance Eq ParseError where
-  (==) e1 e2 = (errorPos e1 == errorPos e2) &&
-               (errorMessages e1 == errorMessages e2)
-
-mkTestCase expected seen = TestCase(expected @=? seen)
+clean :: IO()
+clean = do
+    print "Removing test-generated files."
+    createProcess (shell $ "rm Examples/*.tex Examples/*.pdf")
+    return ()
