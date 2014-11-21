@@ -23,6 +23,5 @@ genSurveyDecl id exp = do
 
 genPrintLatexDecl :: Survey -> Q Dec
 genPrintLatexDecl survey@(Survey id _ _ _) = do
-    let env = makeEnv survey
     body <- [| printLatex survey |]
     return $ ValD (VarP (mkName $ "print" ++ id)) (NormalB body) []
