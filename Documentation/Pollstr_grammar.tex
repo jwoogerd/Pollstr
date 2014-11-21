@@ -16,7 +16,9 @@
 
 \begin{grammar}
 
-    <survey>     ::= "Survey"  <upper>":" <title> <decl>* (<section>* | <item>*)
+    <program>    ::= <decl>* <survey>
+
+    <survey>     ::= "Survey"  <upper>":" <title> (<section>* | <item>*)
 
     <section>    ::= "Section" <upper>":" <title> <item>* 
 
@@ -40,15 +42,15 @@
 
     <itemID>     ::= "Q"<lower>
 
-    <upper> ::= <identifier> with capitalized first character
+    <title>      ::= <stringLit>
+
+    <upper>      ::= <identifier> with capitalized first character
     
     <lower>      ::= <identifier> with lowercase first character
 
     <stringLit>  ::= As defined in Text.Parsec.Token
 
     <identifier> ::= As defined in Text.Parsec.Token
-
-    <whiteSpace> ::= As defined in Text.Parsec.Token
 
 
 \end{grammar}

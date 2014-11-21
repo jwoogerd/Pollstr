@@ -10,8 +10,10 @@ import Language.Quote
     two declarations: surveySimple has type Survey and is the survey represented 
     in Pollstr abstract syntax. The value printSimple is has type String -> IO()
     and produces a LaTeX at the given path, which produces this survey 
-    rendered in print.
-    
+    rendered in print. A change in the grammar: a survey can either have sections
+    OR top-level 'bare' items, but no longer can have both (see Flow.hs and 
+    Sections.hs for and examples of sectioning).
+
     E.g in ghci: printSimple "Examples/Latex/simple.tex"
 -}
 
