@@ -12,7 +12,14 @@ maintainer:          jayme.woogerd@tufts.edu
 -- copyright:           
 -- category:            
 build-type:          Simple
-extra-source-files: Documentation/Pollstr_grammar.pdf, Examples/Latex/simple.tex, Examples/Latex/sections.tex, Examples/Latex/flow.tex, Examples/Latex/simple.pdf, Examples/Latex/sections.pdf, Examples/Latex/flow.pdf
+extra-source-files: Documentation/Pollstr_grammar.pdf,
+                    Examples/Reference/simple.tex,
+                    Examples/Reference/sections.tex,
+                    Examples/Reference/flow.tex,
+                    Examples/Reference/simple.pdf,
+                    Examples/Reference/sections.pdf,
+                    Examples/Reference/flow.pdf,
+                    README
 cabal-version:       >=1.10
 
 library
