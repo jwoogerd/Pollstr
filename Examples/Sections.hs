@@ -6,14 +6,8 @@ import Language.Syntax
 import Language.Quote
 
 {-
-    This example shows how survey sections will work. There can be any number
-    of sections, and sections can be nested. Right now the indentation is 
-    not enforced by the parser, but I am considering making the indentation
-    mandatory. Section and survey identifiers must start with a capital letter.
-
-    Right now Survey and Section have the exact same abstract syntax and
-    constructions. This seems repetitive, but for some reason it seems 
-    prudent to keep these two entities distinct.
+    This example shows multiple sections and declarations, as well as skips. 
+    This program generates two declarations: surveySections and printSections.
 -}
 
 [pollstr|

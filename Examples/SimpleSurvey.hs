@@ -11,6 +11,8 @@ import Language.Quote
     in Pollstr abstract syntax. The value printSimple is has type String -> IO()
     and produces a LaTeX at the given path, which produces this survey 
     rendered in print.
+    
+    E.g in ghci: printSimple "Examples/Latex/simple.tex"
 -}
 
 [pollstr| 

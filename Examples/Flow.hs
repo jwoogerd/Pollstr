@@ -17,7 +17,7 @@ import Language.Quote
     Response/Question variable binding now happens outside the Survey. Also, 
     Sections can no longer be nested -- in practice, most surveys have only one
     level of sectioning. In addition to identifiers, Surveys and Sections are
-    also given a string title.
+    also given string titles, which are printed.
 -}
 
 [pollstr|
