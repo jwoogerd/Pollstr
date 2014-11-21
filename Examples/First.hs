@@ -24,18 +24,18 @@ tests = TestList[ TestLabel "SimpleSurvey" simple_test
                 ]
 
 -- Testing the simplest survey
-simple_result = parse survey "" simpleSurveyText 
-simple_expected = Right simpleSurveyAST
+simple_result = surveySimple
+simple_expected = simpleSurveyAST
 simple_test = mkTestCase simple_expected simple_result
 
 -- Testing sections, including nested sections
-sections_result = parse survey "" sectionsText 
-sections_expected = Right sectionsAST
+sections_result = surveySections
+sections_expected = sectionsAST
 sections_test = mkTestCase sections_expected sections_result
 
 -- Testing flow control with skips
-flow_result = parse survey "" flowText 
-flow_expected = Right flowAST
+flow_result = surveyFlow
+flow_expected = flowAST
 flow_test = mkTestCase flow_expected flow_result
 
 

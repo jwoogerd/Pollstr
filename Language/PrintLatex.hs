@@ -8,6 +8,14 @@ import Data.List(intersperse)
 
 import Language.Syntax
 
+{-
+    This module exports one function, printLatex that, given a Survey and a
+    path, produces a LaTeX file to render the survey in print. Right now 
+    variable lookup is horrendous -- I plan to implement a variable environment,
+    which will also allow for multiple declared Surveys to share bound 
+    variables (as of now, you can only define one Survey at a time).
+
+-}
 printLatex :: Survey -> String -> IO ()
 printLatex s dest = execLaTeXT (surveyL s) >>= renderFile dest
 
@@ -38,7 +46,7 @@ itemsL decls items =
 
 questionL :: Monad m => Question -> [Decl] -> LaTeXT_ m
 questionL (Question q) _  = fromString q
-questionL (Qvar qv) decls = case lookupQ decls of Just q  -> questionL q []
+questionL (Qvar qv) decls = case lookupQ decls of Just q  -> questionL q decls
                                                   Nothing -> error "Not found"
     where lookupQ []                    = Nothing
           lookupQ (QuestDecl id q:rest) = if qv == id then Just q else lookupQ rest
@@ -52,7 +60,7 @@ responseL (Response rs) skip decls = let
     countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
     responses =  zipWith countBy naturals $ fmap (skipL skip decls) rs
     in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses)
-responseL (Rvar rv) skip decls = case lookup decls of Just r  -> responseL r skip []
+responseL (Rvar rv) skip decls = case lookup decls of Just r  -> responseL r skip decls
                                                       Nothing -> error "Not found"
     where lookup []                   = Nothing                                            
           lookup (RespDecl id r:rest) = if rv == id then Just r else lookup rest
@@ -69,10 +77,12 @@ skipL (Skip id (Response skips)) decls rs =
 skipL (Skip id (Rvar rv)) decls rs = 
     case lookup decls of 
         Just (Response skips) -> 
+            fromString rs <>
             if rs `elem` skips
             then hspace (Mm 3) <> textit (fromString "(skip to question "
                  <> ref (fromString id) <> fromString ")")
             else fromString ""
+        Just (Rvar r) -> skipL (Skip id (Rvar r)) decls rs
         Nothing -> error "Not found"
         where lookup []                   = Nothing                                            
               lookup (RespDecl id r:rest) = if rv == id then Just r else lookup rest
