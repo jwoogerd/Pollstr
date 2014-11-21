@@ -12,12 +12,9 @@ import Language.Environment
 
 {-
     This module exports one function, printLatex that, given a Survey and a
-    path, produces a LaTeX file to render the survey in print. Right now 
-    variable lookup is horrendous -- I plan to implement a variable environment,
-    which will also allow for multiple declared Surveys to share bound 
-    variables (as of now, you can only define one Survey at a time).
-
+    path, produces a LaTeX file to render the survey in print.
 -}
+
 printLatex :: Survey -> String -> IO ()
 printLatex s dest = execLaTeXT (surveyL s) >>= renderFile dest
 
@@ -50,7 +47,7 @@ questionL :: Monad m => Question -> Env -> LaTeXT_ m
 questionL (Question q) _  = fromString q
 questionL (Qvar qv) env = 
     case (Map.lookup qv (qs env)) of Just q  -> questionL q env
-                                     Nothing -> error "Not found"
+                                     Nothing -> error "Question not defined"
 
 responseL :: Monad m => Response -> Skip -> Env -> LaTeXT_ m
 responseL (Response rs) skip env = let 
@@ -60,8 +57,9 @@ responseL (Response rs) skip env = let
     countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
     responses =  zipWith countBy naturals $ fmap (skipL skip env) rs
     in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses)
-responseL (Rvar rv) skip env = case Map.lookup rv (rs env) of Just r  -> responseL r skip env 
-                                                              Nothing -> error "Not found"
+responseL (Rvar rv) skip env = 
+    case Map.lookup rv (rs env) of Just r  -> responseL r skip env 
+                                   Nothing -> error "Response not defined"
 
 skipL :: Monad m => Skip -> Env -> String -> LaTeXT_ m
 skipL None _ resp = fromString resp
