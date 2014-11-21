@@ -35,20 +35,3 @@ import Language.Quote
             Qbrand: "What brand of toothpaste do you use?"
                     ["Colgate", "Crest", "Other"]
 |]
-
-{- Expected Pollstr abstract syntax -}
-
-topLevelDecls = [RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"]),
-                 RespDecl "redundant" (Rvar "howFrequent")]
-
-hygieneItems = [
-    Item "Qteeth" (Question "How often do you brush your teeth?")
-         (Rvar "howFrequent") (Skip "Qbrand" (Response ["Often", "Always"])),
-    Item "Qhair" (Question "How often do you brush your hair?")
-         (Rvar "redundant") None,
-    Item "Qbrand" (Question "What brand of toothpaste do you use?")
-        (Response ["Colgate","Crest","Other"]) None]
-
-flowAST = Survey "Flow" "A short survey about hygiene" 
-         topLevelDecls [Section "Hygiene" "Hygiene" hygieneItems]
-

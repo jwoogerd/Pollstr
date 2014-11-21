@@ -24,10 +24,3 @@ import Language.Quote
     Survey Simple: "My first survey"
         Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" ["Yes", "No"]
 |]
-
-{- Expected Pollstr abstract syntax -}
-
-simpleSurveyAST = Survey "Simple" "My first survey" [RespDecl "bool" (Response ["Yes","No"]),
-    QuestDecl "movie" (Question "What is your favorite movie?")]
-    [Section "Bare" "" [Item "Qducks" (Question "Have you ever seen the movie 'The Mighty Ducks'?")
-    (Response ["Yes","No"]) None]]

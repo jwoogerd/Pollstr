@@ -29,26 +29,3 @@ import Language.Quote
            Qschool: "How often do you go to school?" howFrequent
            Qlunch: "What do you eat for lunch?" ["candy", "kale", "other"]
 |]
-
-{- Expected Pollstr abstract syntax -}
-
-topLevelDecls = [
-    RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"]),
-    QuestDecl "train" (Question "How often do you ride the T?"),
-    QuestDecl "dogcat" (Question "Do your prefer dogs or cats?")]
-
-section1 = Section "Hygiene" "Hygiene" 
-    [Item "Qteeth" (Question "How often do you brush your teeth?")
-        (Rvar "howFrequent") (Skip "Qschool" (Response ["Never"])),
-    Item "Qhair" (Question "How often do you brush your hair?")
-    (Rvar "howFrequent") None]
-
-section2 = Section "Transportation" "Transportation" 
-    [Item "Qtrain" (Qvar "train") (Rvar "howFrequent") None]
-
-section3 = Section "School" "School"
-    [Item "Qschool" (Question "How often do you go to school?") (Rvar "howFrequent") None,
-    Item "Qlunch"(Question "What do you eat for lunch?") (Response ["candy","kale","other"]) None]
-
-sectionsAST = Survey "Sections" "This is an example of sections"
-    topLevelDecls [section1, section2, section3]
