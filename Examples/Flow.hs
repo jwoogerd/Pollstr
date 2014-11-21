@@ -46,11 +46,11 @@ flowText = unlines [
 topLevelDecls = [RespDecl "howFrequent" (Response ["Never","Sometimes","Often","Always"])]
 
 hygieneItems = [
-    Item "teeth" (Question "How often do you brush your teeth?")
-         (Rvar "howFrequent") (Skip "brand" (Response ["Often", "Always"])),
-    Item "hair" (Question "How often do you brush your hair?")
+    Item "Qteeth" (Question "How often do you brush your teeth?")
+         (Rvar "howFrequent") (Skip "Qbrand" (Response ["Often", "Always"])),
+    Item "Qhair" (Question "How often do you brush your hair?")
          (Rvar "howFrequent") None,
-    Item "brand" (Question "What brand of toothpaste do you use?")
+    Item "Qbrand" (Question "What brand of toothpaste do you use?")
         (Response ["Colgate","Crest","Other"]) None]
 
 flowAST = Survey "Flow" "A short survey about hygiene" 

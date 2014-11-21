@@ -23,18 +23,18 @@ surveyL (Survey id title decls sections) =
 sectionsL :: Monad m => [Decl] -> [Section] -> LaTeXT_ m
 sectionsL decls [] = fromString ""
 sectionsL decls [Section "Bare" "" items] = itemsL decls items
-sectionsL decls sections = enumerate (mconcat $ map sectionL sections)
+sectionsL decls (section:rest) = sectionL section <> sectionsL decls rest
     where sectionL (Section id title items) =
-            LT.item Nothing <> textbf (fromString title) <> itemsL decls items
+            LT.section (fromString title) <> itemsL decls items
 
 itemsL :: Monad m => [Decl] -> [Item] -> LaTeXT_ m
 itemsL decls items = 
     let mkItem (Item id quest resp skp) = 
-            LT.item Nothing <> questionL quest decls
-            <> vspace (Mm 2) <> newline  
-            <> responseL resp decls
-            <> skipL skp decls
-    in enumerate (mconcat $ map mkItem items)
+            subsection $ textnormal (questionL quest decls
+                <> vspace (Mm 2) <> newline  
+                <> responseL resp skp decls)
+            <> label (fromString id)
+    in mconcat $ map mkItem items
 
 questionL :: Monad m => Question -> [Decl] -> LaTeXT_ m
 questionL (Question q) _  = fromString q
@@ -44,18 +44,36 @@ questionL (Qvar qv) decls = case lookupQ decls of Just q  -> questionL q []
           lookupQ (QuestDecl id q:rest) = if qv == id then Just q else lookupQ rest
           lookupQ (_:rest)              = lookupQ rest
 
-responseL :: Monad m => Response -> [Decl] -> LaTeXT_ m
--- TODO: add numbers at end
-responseL (Response rs) _  = let 
+responseL :: Monad m => Response -> Skip -> [Decl] -> LaTeXT_ m
+responseL (Response rs) skip decls = let 
     checkbox = fromString "[" <> hspace (Mm 5) 
             <> fromString "]" <> hspace (Mm 4)
-    in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) $ fmap fromString rs)
-responseL (Rvar rv) decls = case lookup decls of Just r  -> responseL r []
-                                                 Nothing -> error "Not found"
+    naturals  = iterate (+ 1) 1
+    countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
+    responses =  zipWith countBy naturals $ fmap (skipL skip decls) rs
+    in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses)
+responseL (Rvar rv) skip decls = case lookup decls of Just r  -> responseL r skip []
+                                                      Nothing -> error "Not found"
     where lookup []                   = Nothing                                            
           lookup (RespDecl id r:rest) = if rv == id then Just r else lookup rest
           lookup (_:rest)             = lookup rest
 
-skipL :: Monad m => Skip -> [Decl] -> LaTeXT_ m
-skipL None _ = fromString ""
-skipL (Skip id r) decls = fromString "Not implemented"
+skipL :: Monad m => Skip -> [Decl] -> String -> LaTeXT_ m
+skipL None _ rs = fromString rs
+skipL (Skip id (Response skips)) decls rs =
+    fromString rs <>
+    if rs `elem` skips 
+    then hspace (Mm 3) <> textit (fromString "(skip to question "
+         <> ref (fromString id) <> fromString ")")
+    else fromString ""
+skipL (Skip id (Rvar rv)) decls rs = 
+    case lookup decls of 
+        Just (Response skips) -> 
+            if rs `elem` skips
+            then hspace (Mm 3) <> textit (fromString "(skip to question "
+                 <> ref (fromString id) <> fromString ")")
+            else fromString ""
+        Nothing -> error "Not found"
+        where lookup []                   = Nothing                                            
+              lookup (RespDecl id r:rest) = if rv == id then Just r else lookup rest
+              lookup (_:rest)             = lookup rest

@@ -65,7 +65,7 @@ itemID :: PS.Parser ID
 itemID = do
     oneOf "Q"
     id <- identifier
-    return id
+    return ("Q" ++ id)
     <?> "item identifier to start with 'Q'"
 
 skipTo :: PS.Parser Skip

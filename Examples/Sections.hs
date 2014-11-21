@@ -63,17 +63,17 @@ topLevelDecls = [
     QuestDecl "dogcat" (Question "Do your prefer dogs or cats?")]
 
 section1 = Section "Hygiene" "Hygiene" 
-    [Item "teeth" (Question "How often do you brush your teeth?")
-        (Rvar "howFrequent") (Skip "school" (Response ["Never"])),
-    Item "hair" (Question "How often do you brush your hair?")
+    [Item "Qteeth" (Question "How often do you brush your teeth?")
+        (Rvar "howFrequent") (Skip "Qschool" (Response ["Never"])),
+    Item "Qhair" (Question "How often do you brush your hair?")
     (Rvar "howFrequent") None]
 
 section2 = Section "Transportation" "Transportation" 
-    [Item "train" (Qvar "train") (Rvar "howFrequent") None]
+    [Item "Qtrain" (Qvar "train") (Rvar "howFrequent") None]
 
 section3 = Section "School" "School"
-    [Item "school" (Question "How often do you go to school?") (Rvar "howFrequent") None,
-    Item "lunch"(Question "What do you eat for lunch?") (Response ["candy","kale","other"]) None]
+    [Item "Qschool" (Question "How often do you go to school?") (Rvar "howFrequent") None,
+    Item "Qlunch"(Question "What do you eat for lunch?") (Response ["candy","kale","other"]) None]
 
 sectionsAST = Survey "Sections" "This is an example of sections"
     topLevelDecls [section1, section2, section3]
