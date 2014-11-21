@@ -1,6 +1,4 @@
-module Language.Quote
-    (pollstr)
-    where
+module Language.Quote (pollstr) where
 
 import Prelude hiding (exp, init)
 import System.IO.Unsafe (unsafePerformIO)
