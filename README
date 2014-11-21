@@ -2,4 +2,13 @@ Jayme Woogerd
 Comp 150pld -- Programming Language Design
 November 21, 2014
 
+After running 'cabal install', run the tests by loading Examples/First.hs in
+ghci and invoke the 'test' function.
+
 To do:
+    - HTML generation
+    - Allow specification of author, institution, survey description
+    - Allow adding instructions to a survey or to specific sections
+    - Allow for multiple Surveys sharing same variable environment
+    - Extend response types to include short answer/blank space
+    - Relax Item identifiers to include numbers, underscores

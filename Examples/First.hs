@@ -18,6 +18,12 @@ import Examples.Flow
 
 {- Pollstr testing suite -}
 
+{-
+    Test Pollstr examples by executing the generated print* functions and
+    building pdf surveys from the resulting LaTeX files. Generated test files
+    live in the Examples directory and may be referenced against files in 
+    Reference directory.
+-}
 test :: IO()
 test = do
     print "Invoking printSimple and saving output at 'Examples/simple.tex'"
