@@ -3,7 +3,8 @@ Comp 150pld -- Programming Language Design
 November 21, 2014
 
 After running 'cabal install', run the tests by loading Examples/First.hs in
-ghci and invoke the 'test' function.
+ghci and invoke the 'test' function. `latemk` is required to build the pdf files
+from tex.
 
 To do:
     - HTML generation
