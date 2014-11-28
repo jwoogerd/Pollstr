@@ -40,7 +40,7 @@
 
     <skipTo>     ::= "skipTo" "(" <itemID>"," <response> ")"
 
-    <itemID>     ::= "Q"<lower>
+    <itemID>     ::= "Q"<alphaNum>*
 
     <title>      ::= <stringLit>
 
@@ -51,6 +51,8 @@
     <stringLit>  ::= As defined in Text.Parsec.Token
 
     <identifier> ::= As defined in Text.Parsec.Token
+
+    <alphaNum> ::= As defined in Text.Parsec.Char
 
 
 \end{grammar}
