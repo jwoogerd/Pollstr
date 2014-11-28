@@ -64,7 +64,7 @@ rlit = do
 itemID :: PS.Parser ID
 itemID = do
     oneOf "Q"
-    id <- identifier
+    id <- many alphaNum
     return ("Q" ++ id)
     <?> "item identifier to start with 'Q'"
 

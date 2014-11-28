@@ -22,5 +22,5 @@ import Language.Quote
     Question movie = "What is your favorite movie?"
 
     Survey Simple: "My first survey"
-        Qducks: "Have you ever seen the movie 'The Mighty Ducks'?" ["Yes", "No"]
+        Q1: "Have you ever seen the movie 'The Mighty Ducks'?" ["Yes", "No"]
 |]
