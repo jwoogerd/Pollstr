@@ -23,7 +23,7 @@ extra-source-files: Documentation/Pollstr_grammar.pdf,
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Examples.First, Examples.Flow, Examples.Sections, Examples.SimpleSurvey, Language.Parser, Language.Syntax, Language.Quote, Language.CodeGen, Language.PrintLatex, Language.Environment
+  exposed-modules:     Examples.First, Examples.Flow, Examples.Sections, Examples.SimpleSurvey, Language.Parser, Language.Syntax, Language.Quote, Language.CodeGen, Language.PrintLatex, Language.Environment, Language.ToJSON
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8, 
@@ -33,7 +33,10 @@ library
                        template-haskell,
                        process,
                        containers,
-                       HaTeX
+                       HaTeX,
+                       aeson,
+                       aeson-pretty,
+                       bytestring
 
   -- hs-source-dirs:      
   default-language:    Haskell2010

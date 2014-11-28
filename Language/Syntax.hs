@@ -1,8 +1,9 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable, OverloadedStrings #-}
 
 module Language.Syntax where
 
 import Data.Data
+import Data.Aeson
 import Language.Haskell.TH.Syntax
 import Language.Haskell.TH.Quote
 
@@ -32,3 +33,26 @@ data Skip       = Skip ID Response | None deriving (Show, Eq, Typeable, Data)
 
 instance Lift Survey where
     lift s = dataToExpQ (\x -> Nothing) s
+
+instance ToJSON Survey where
+    toJSON (Survey id title decls sections) =
+        object ["survey" .= title, "sections" .= toJSON sections]
+
+instance ToJSON Section where
+    toJSON (Section id title items) =
+        object ["title" .= title, "items" .= toJSON items]
+
+instance ToJSON Item where
+    toJSON (Item id (Question q) (Response r) None) = 
+        object[ "id" .= id, 
+                "question" .= q,
+                "response" .= toJSON r
+              ]
+    toJSON (Item id (Question q) (Response r) (Skip to (Response resp))) = 
+        object[ "id" .= id, 
+                "question" .= q,
+                "response" .= (toJSON r),
+                "skips"    .= object ["resp" .= toJSON resp, "to" .= to]
+              ]
+    toJSON _ = undefined
+
