@@ -3,7 +3,7 @@
 module Language.PrintLatex (printLatex) where
 
 import Text.LaTeX hiding (title, item, section)
-import qualified Text.LaTeX as LT (title, item, section)
+import qualified Text.LaTeX as LT (title, author, institute, paragraph, item, section)
 import qualified Data.Map.Strict as Map
 import Data.List(intersperse)
 
@@ -22,10 +22,14 @@ preamble :: Monad m => LaTeXT_ m
 preamble = documentclass [] article
 
 surveyL :: Monad m => Survey -> LaTeXT_ m
-surveyL (Survey id title decls sections) = 
+surveyL (Survey id (Meta title author desc) decls sections) = 
     let env = makeEnv decls
-    in preamble <> LT.title (fromString title)
-       <> document (maketitle <> sectionsL env sections)
+        mkString s = case s of (Just s) -> fromString s
+                               Nothing  -> fromString ""
+    in preamble 
+       <> LT.title (mkString title) 
+       <> LT.author (mkString author)
+       <> document (maketitle <> LT.paragraph (mkString desc) <> sectionsL env sections)
 
 sectionsL :: Monad m => Env -> [Section] -> LaTeXT_ m
 sectionsL env [] = fromString ""

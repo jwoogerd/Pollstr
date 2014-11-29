@@ -17,7 +17,7 @@ surveyToJSON s dest =
                     Nothing   -> print json
 
 resolveVars :: Survey -> Survey
-resolveVars (Survey id title decls sections) =
+resolveVars (Survey id meta decls sections) =
     let env = makeEnv decls
         resolveResponse (Rvar id) = 
             case Map.lookup id (rs env) of Just r  -> resolveResponse r 
@@ -31,4 +31,4 @@ resolveVars (Survey id title decls sections) =
         resolveSkip None = None
         resolveItem (Item id q r s) = Item id (resolveQuestion q) (resolveResponse r) (resolveSkip s)
         resolveSection (Section id title items) = Section id title (map resolveItem items)
-    in Survey id title decls (map resolveSection sections)
+    in Survey id meta decls (map resolveSection sections)

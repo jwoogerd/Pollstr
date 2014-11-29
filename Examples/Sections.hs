@@ -15,7 +15,10 @@ import Language.Quote
    Question train = "How often do you ride the T?"
    Question dogcat = "Do your prefer dogs or cats?"
 
-    Survey Sections: "This is an example of sections"
+    Survey Sections:
+      Title: "Example Survey with Sections"
+      Author: "Jayme Woogerd"
+      Description: "This is an example of sections"
 
        Section Hygiene: "Hygiene"
            Qteeth: "How often do you brush your teeth?" howFrequent

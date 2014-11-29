@@ -21,6 +21,7 @@ import Language.Quote
     Response bool = ["Yes", "No"]
     Question movie = "What is your favorite movie?"
 
-    Survey Simple: "My first survey"
+    Survey Simple: 
+        Title: "My first survey"
         Q1: "Have you ever seen the movie 'The Mighty Ducks'?" ["Yes", "No"]
 |]

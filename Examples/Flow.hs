@@ -24,7 +24,9 @@ import Language.Quote
     Response howFrequent = ["Never", "Sometimes", "Often", "Always"]
     Response redundant = howFrequent
 
-    Survey Flow: "A short survey about hygiene"
+    Survey Flow: 
+        Title: "A short survey about hygiene"
+        
         Section Hygiene: "Hygiene"
 
             Qteeth: "How often do you brush your teeth?" howFrequent

@@ -12,7 +12,12 @@ import Language.Haskell.TH.Quote
 type ID         = String
 type Title      = String
 
-data Survey     = Survey ID Title [Decl] [Section]
+data Meta = Meta { title       :: Maybe String
+                 , author      :: Maybe String
+                 , description :: Maybe String
+                 } deriving (Show, Eq, Typeable, Data)
+
+data Survey     = Survey ID Meta [Decl] [Section]
                   deriving (Show, Eq, Typeable, Data)
 
 data Section    = Section ID Title [Item] deriving (Show, Eq, Typeable, Data)
@@ -35,8 +40,17 @@ instance Lift Survey where
     lift s = dataToExpQ (\x -> Nothing) s
 
 instance ToJSON Survey where
-    toJSON (Survey id title decls sections) =
-        object ["survey" .= title, "sections" .= toJSON sections]
+    toJSON (Survey id meta decls sections) =
+        object ["meta" .= toJSON meta, "sections" .= toJSON sections]
+
+instance ToJSON Meta where
+  toJSON (Meta title author description) =
+    let mkString (Just s) = s
+        mkString Nothing  = ""
+    in object ["title"       .= mkString title,
+               "author"      .= mkString author,
+               "description" .= mkString description
+              ]
 
 instance ToJSON Section where
     toJSON (Section id title items) =

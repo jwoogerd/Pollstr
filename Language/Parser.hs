@@ -134,6 +134,37 @@ lowerID = do
     rest <- identifier
     return (first:rest)
 
+titleP :: PS.Parser String
+titleP = do
+    reserved "Title"
+    whiteSpace
+    reserved ":" 
+    title <- stringLiteral 
+    return title
+
+authorP :: PS.Parser String
+authorP = do
+    reserved "Author"
+    whiteSpace
+    reserved ":" 
+    author <- stringLiteral 
+    return author
+
+descriptionP :: PS.Parser String
+descriptionP = do
+    reserved "Description"
+    whiteSpace
+    reserved ":" 
+    description <- stringLiteral 
+    return description
+
+meta :: PS.Parser Meta
+meta = do
+    title <- optionMaybe titleP
+    author <- optionMaybe authorP
+    description <- optionMaybe descriptionP
+    return (Meta title author description)
+
 section :: PS.Parser Section
 section = do
     reserved "Section"
@@ -163,15 +194,16 @@ survey = do
     whiteSpace
     reserved ":"
     whiteSpace
-    title <- stringLiteral
+    metaData <- meta
     sects <- sections
-    return $ Survey id title ds sects
+    return $ Survey id metaData ds sects
     <?> "survey"
 
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
   { reservedOpNames = ["(", ")", ",", ":"],
-    reservedNames   = ["Question", "Response", "skipTo", "Survey", "Section"]})
+    reservedNames   = ["Question", "Response", "skipTo", "Survey", "Section",
+                        "Title", "Author", "Description"]})
 
 whiteSpace    = PT.whiteSpace    lexer
 identifier    = PT.identifier    lexer
