@@ -1,0 +1,22 @@
+{
+    "sections": [
+        {
+            "items": [
+                {
+                    "response": [
+                        "Yes",
+                        "No"
+                    ],
+                    "id": "Q1",
+                    "question": "Have you ever seen the movie 'The Mighty Ducks'?"
+                }
+            ],
+            "title": ""
+        }
+    ],
+    "meta": {
+        "author": "",
+        "title": "My first survey",
+        "description": ""
+    }
+}

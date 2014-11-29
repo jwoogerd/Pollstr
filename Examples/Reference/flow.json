@@ -1,0 +1,50 @@
+{
+    "sections": [
+        {
+            "items": [
+                {
+                    "skips": {
+                        "resp": [
+                            "Often",
+                            "Always"
+                        ],
+                        "to": "Qbrand"
+                    },
+                    "response": [
+                        "Never",
+                        "Sometimes",
+                        "Often",
+                        "Always"
+                    ],
+                    "id": "Qteeth",
+                    "question": "How often do you brush your teeth?"
+                },
+                {
+                    "response": [
+                        "Never",
+                        "Sometimes",
+                        "Often",
+                        "Always"
+                    ],
+                    "id": "Qhair",
+                    "question": "How often do you brush your hair?"
+                },
+                {
+                    "response": [
+                        "Colgate",
+                        "Crest",
+                        "Other"
+                    ],
+                    "id": "Qbrand",
+                    "question": "What brand of toothpaste do you use?"
+                }
+            ],
+            "title": "Hygiene"
+        }
+    ],
+    "meta": {
+        "author": "",
+        "title": "A short survey about hygiene",
+        "description": ""
+    }
+}
