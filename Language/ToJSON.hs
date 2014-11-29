@@ -1,20 +1,31 @@
-module Language.ToJSON (surveyToJSON) where
+module Language.ToJSON (surveyToJSON, surveyToJSON') where
 
 import Prelude hiding (writeFile)
 import qualified Data.Map.Strict as Map
 import Data.Aeson
 import Data.Aeson.Encode.Pretty
 import Data.ByteString.Lazy (writeFile)
+import Data.ByteString.Lazy hiding (map)
 
 import Language.Syntax
 import Language.Environment
 
-surveyToJSON :: Survey -> Maybe FilePath -> IO()
+{- 
+    This module exports two functions for generating JSON structures from
+    Pollstr AST: surveyToJSON pretty-prints the JSON string to a given filepath
+    and surveyToJSON' returns the raw ByteString for testing purposes.
+-}
+
+-- Pretty-print a survey at the given filepath
+surveyToJSON :: Survey -> FilePath -> IO()
 surveyToJSON s dest =
     let s' = resolveVars s
         json = encodePretty s'
-    in case dest of Just dest -> writeFile dest json
-                    Nothing   -> print json
+    in writeFile dest json
+
+-- Return a JSON representation of a survey as a ByteString
+surveyToJSON' :: Survey -> Data.ByteString.Lazy.ByteString 
+surveyToJSON' s = encode $ resolveVars s
 
 resolveVars :: Survey -> Survey
 resolveVars (Survey id meta decls sections) =

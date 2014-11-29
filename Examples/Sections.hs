@@ -7,7 +7,8 @@ import Language.Quote
 
 {-
     This example shows multiple sections and declarations, as well as skips. 
-    This program generates two declarations: surveySections and printSections.
+    This program generates three declarations: printSections, toJSONSections,
+    and toJSONSections'.
 -}
 
 [pollstr|

@@ -14,14 +14,15 @@ import Language.ToJSON
 makeSurveyDecs :: Survey -> Q [Dec]
 makeSurveyDecs survey@(Survey id _ _ _) = do
     s              <- [| survey |]
-    surveyDecl     <- genSurveyDecl id s
+  --  surveyDecl     <- genSurveyDecl id s
     printLatexDecl <- genPrintLatexDecl survey
     jsonDecl       <- genJSONDecl survey
-    return [surveyDecl, printLatexDecl, jsonDecl]
+    jsonDecl'      <- genJSONDecl' survey
+    return [printLatexDecl, jsonDecl, jsonDecl']
 
-genSurveyDecl :: ID -> Exp -> Q Dec
-genSurveyDecl id exp = do 
-    return $ ValD (VarP (mkName $ "survey" ++ id)) (NormalB exp) []
+--genSurveyDecl :: ID -> Exp -> Q Dec
+--genSurveyDecl id exp = do 
+--    return $ ValD (VarP (mkName $ "survey" ++ id)) (NormalB exp) []
 
 genPrintLatexDecl :: Survey -> Q Dec
 genPrintLatexDecl survey@(Survey id _ _ _) = do
@@ -32,3 +33,8 @@ genJSONDecl :: Survey -> Q Dec
 genJSONDecl survey@(Survey id _ _ _) = do
     body <- [| surveyToJSON survey |]
     return $ ValD (VarP (mkName $ "toJSON" ++ id)) (NormalB body) []
+
+genJSONDecl' :: Survey -> Q Dec
+genJSONDecl' survey@(Survey id _ _ _) = do
+    body <- [| surveyToJSON' survey |]
+    return $ ValD (VarP (mkName $ "toJSON" ++ id ++ "'")) (NormalB body) []

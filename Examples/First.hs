@@ -9,6 +9,7 @@ import Text.ParserCombinators.Parsec
 import Text.Parsec.Error
 
 import System.Process
+import Data.ByteString.Lazy.Char8
 
 import Language.Syntax
 import Language.Quote
@@ -19,13 +20,16 @@ import Examples.Flow
 {- Pollstr testing suite -}
 
 {-
-    Test Pollstr examples by executing the generated print* functions and
-    building pdf surveys from the resulting LaTeX files. Generated test files
-    live in the Examples directory and may be referenced against files in 
-    Reference directory.
+    There are two sets of tests in this module: testLatex executes the 
+    generated print* functions from the examples and builds pdf surveys from 
+    the resulting LaTeX files. Generated test files live in the Examples 
+    directory and may be referenced against files in Reference directory.
+
+    The other function, testJSON runs units tests on the expected JSON string
+    generated from executing the generated toJSON*' functions.
 -}
-test :: IO()
-test = do
+testLatex :: IO()
+testLatex = do
     print "Invoking printSimple and saving output at 'Examples/simple.tex'"
     printSimple "Examples/simple.tex"
 
@@ -49,3 +53,48 @@ clean = do
     print "Removing test-generated files."
     createProcess (shell $ "rm Examples/*.tex Examples/*.pdf")
     return ()
+
+
+
+testJSON = runTestTT tests
+
+tests = TestList[ TestLabel "SimpleSurvey" simple_test
+                , TestLabel "Sections" sections_test
+                ]
+
+-- Testing the simplest survey
+simple_result = toJSONSimple' 
+simple_expected = pack $ 
+    "{\"sections\":[{\"items\":[{\"response\":"
+    ++ "[\"Yes\",\"No\"],\"id\":\"Q1\",\"question\":\"Have you ever seen the movie " 
+    ++ "'The Mighty Ducks'?\"}],\"title\":\"\"}],\"meta\":{\"author\":\"\",\"title\""
+    ++ ":\"My first survey\",\"description\":\"\"}}"
+simple_test = mkTestCase simple_expected simple_result
+
+-- Testing sections, including nested sections
+sections_result = toJSONSections' 
+sections_expected = pack $ 
+    "{\"sections\":[{\"items\":[{\"skips\":{\"resp\":"
+    ++ "[\"Never\"],\"to\":\"Qschool\"},\"response\":[\"Never\",\"Sometimes\","
+    ++ "\"Often\",\"Always\"],\"id\":\"Qteeth\",\"question\":\"How often do you"
+    ++ " brush your teeth?\"},{\"response\":[\"Never\",\"Sometimes\",\"Often\","
+    ++ "\"Always\"],\"id\":\"Qhair\",\"question\":\"How often do you brush your"
+    ++ " hair?\"}],\"title\":\"Hygiene\"},{\"items\":[{\"response\":[\"Never\","
+    ++ "\"Sometimes\",\"Often\",\"Always\"],\"id\":\"Qtrain\",\"question\":\"How"
+    ++ " often do you ride the T?\"}],\"title\":\"Transportation\"},{\"items\":"
+    ++ "[{\"response\":[\"Never\",\"Sometimes\",\"Often\",\"Always\"],\"id\":\""
+    ++ "Qschool\",\"question\":\"How often do you go to school?\"},{\"response\""
+    ++ ":[\"candy\",\"kale\",\"other\"],\"id\":\"Qlunch\",\"question\":\"What "
+    ++ "do you eat for lunch?\"}],\"title\":\"School\"}],\"meta\":{\"author\":"
+    ++ "\"Jayme Woogerd\",\"title\":\"Example Survey with Sections\",\"descrip"
+    ++ "tion\":\"This is an example of sections\"}}"
+sections_test = mkTestCase sections_expected sections_result
+
+{-
+    testing infrastructure (borrowed from Will and Andrew)
+-}
+instance Eq ParseError where
+  (==) e1 e2 = (errorPos e1 == errorPos e2) &&
+               (errorMessages e1 == errorMessages e2)
+
+mkTestCase expected seen = TestCase(expected @=? seen)
