@@ -5,7 +5,7 @@
 
 \title{Pollstr Grammar}
 \author{Jayme Woogerd}
-\date{November 21, 2014}
+\date{December 1, 2014}
 
 \setlength{\grammarindent}{6em}
 
@@ -18,7 +18,9 @@
 
     <program>    ::= <decl>* <survey>
 
-    <survey>     ::= "Survey"  <upper>":" <title> (<section>* | <item>*)
+    <survey>     ::= "Survey"  <upper>":" <meta> (<section>* | <item>*)?
+
+    <meta>       ::= <title>? <author>? <description>?
 
     <section>    ::= "Section" <upper>":" <title> <item>* 
 
