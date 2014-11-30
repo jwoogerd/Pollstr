@@ -16,14 +16,30 @@ extra-source-files: Documentation/Pollstr_grammar.pdf,
                     Examples/Reference/simple.tex,
                     Examples/Reference/sections.tex,
                     Examples/Reference/flow.tex,
+                    Examples/Reference/demo.tex,
                     Examples/Reference/simple.pdf,
                     Examples/Reference/sections.pdf,
                     Examples/Reference/flow.pdf,
+                    Examples/Reference/demo.pdf,
+                    Examples/Reference/simple.json,
+                    Examples/Reference/sections.json,
+                    Examples/Reference/flow.json, Examples/Reference/demo.json,
                     README
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Examples.First, Examples.Flow, Examples.Sections, Examples.SimpleSurvey, Language.Parser, Language.Syntax, Language.Quote, Language.CodeGen, Language.PrintLatex, Language.Environment, Language.ToJSON
+  exposed-modules:     Examples.First,
+                       Examples.Flow, 
+                       Examples.Sections, 
+                       Examples.SimpleSurvey, 
+                       Examples.Demo, 
+                       Language.Parser,
+                       Language.Syntax,
+                       Language.Quote,
+                       Language.CodeGen,
+                       Language.PrintLatex,
+                       Language.Environment,
+                       Language.ToJSON
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8, 

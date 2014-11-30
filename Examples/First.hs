@@ -16,6 +16,7 @@ import Language.Quote
 import Examples.SimpleSurvey
 import Examples.Sections
 import Examples.Flow
+import Examples.Demo
 
 {- Pollstr testing suite -}
 
@@ -39,10 +40,14 @@ testLatex = do
     print "Invoking printSections and saving output at 'Examples/sections.tex'"
     printSections "Examples/sections.tex"
 
+    print "Invoking printDemo and saving output at 'Examples/sections.tex'"
+    printDemo "Examples/demo.tex"
+
     print "Generating simple.pdf, flow.pdf, sections.pdf files...and cleaning up"
     createProcess (shell $ "latexmk -pdf Examples/simple.tex &&" ++
                            "latexmk -pdf Examples/flow.tex &&" ++ 
                            "latexmk -pdf Examples/sections.tex && " ++
+                           "latexmk -pdf Examples/demo.tex && " ++
                            "mv *.pdf Examples/ && rm *.log *.aux *.fls *.fdb_latexmk .temp*")
     print "Reference tex and pdf files are located in Examples/Reference"
     return ()
