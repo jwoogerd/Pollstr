@@ -42,7 +42,7 @@ qvar = do
 
 qlit :: PS.Parser Question 
 qlit = do 
-    q <- multiline <|> multiline
+    q <- multiline
     return $ Question q
     <?> "literal question (string)"
 
@@ -158,7 +158,7 @@ multiline' = do
 
 multiline :: PS.Parser String
 multiline = do
-    strings <- many multiline'
+    strings <- many1 multiline'
     return $ mconcat strings
     
 descriptionP :: PS.Parser String
@@ -166,7 +166,7 @@ descriptionP = do
     reserved "Description"
     whiteSpace
     reserved ":" 
-    description <- multiline <|> stringLiteral
+    description <- multiline
     return $ description
 
 meta :: PS.Parser Meta
