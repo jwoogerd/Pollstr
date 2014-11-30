@@ -5,25 +5,24 @@
                 {
                     "skips": {
                         "resp": [
-                            "Be a cockroach"
+                            "\"Have anyone ever heard of a thing called...\""
                         ],
                         "to": "Q3"
                     },
                     "response": [
-                        "Be a cockroach",
-                        "Eat cockroaches"
+                        "\"Have anyone ever heard of a thing called...\"",
+                        "\"I guess misjudged how long that homework would take.\""
                     ],
                     "id": "Q1",
-                    "question": "Would you rather become a cockroach for the rest of your life OR only be able to eat cockroaches for the rest of your life?"
+                    "question": "Would you rather be stuck in a closure with Ming Chow or Norman Ramsey?"
                 },
                 {
                     "response": [
-                        "Sautéed",
-                        "Fried",
-                        "Dipped in chocolate"
+                        "Compile",
+                        "Interpreter"
                     ],
                     "id": "Q2",
-                    "question": "Sautéed, fried or dipped in chocolate?"
+                    "question": "Would you rather have to wait for everything in real life to compile or have an interpreter follow your around all the time, throwing errors at you?"
                 },
                 {
                     "response": [
@@ -32,6 +31,14 @@
                     ],
                     "id": "Q3",
                     "question": "Would you rather only be able to speak in Perl or only be able to talk when others are talking about Perl? "
+                },
+                {
+                    "response": [
+                        "Garbage collector!",
+                        "Nomad monad!"
+                    ],
+                    "id": "Q4",
+                    "question": "Would you rather be a garbage collector or a nomad monad?"
                 }
             ],
             "title": "Would You Rather?"
@@ -44,7 +51,7 @@
                         "Fiction"
                     ],
                     "id": "Q5",
-                    "question": "Fact or Fiction: Every US president with a beard has been a Democrat."
+                    "question": "Fact or Fiction: Bruce Molay has a black belt in karate."
                 },
                 {
                     "response": [
@@ -52,7 +59,7 @@
                         "Fiction"
                     ],
                     "id": "Q11",
-                    "question": "Fact or Fiction: The world's biggest island is Greenland."
+                    "question": "Fact or Fiction: Sam Guyer is is a licensed airplane pilot."
                 }
             ],
             "title": "Fact or Fiction"

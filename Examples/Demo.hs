@@ -23,21 +23,32 @@ import Language.Quote
                      "as bound variables, sections, and skip logic. Enjoy!"
 
         Section First: "Would You Rather?"
-            Q1: "Would you rather become a cockroach for the rest of your life " ++
-                "OR only be able to eat cockroaches for the rest of your life?"
-                ["Be a cockroach", "Eat cockroaches"]
-                skipTo(Q3, ["Be a cockroach"])
+            Q1: "Would you rather be stuck in a closure with Ming Chow or " ++
+                "Norman Ramsey?"
+                ["\"Have anyone ever heard of a thing called...\"",
+                 "\"I guess misjudged how long that homework would take.\""]
+                skipTo(Q3, ["\"Have anyone ever heard of a thing called...\""])
 
-            Q2: "Sautéed, fried or dipped in chocolate?" 
-                ["Sautéed", "Fried", "Dipped in chocolate"]
+            Q2: "Would you rather have to wait for everything in real life to " ++
+                "compile or have an interpreter follow your around all the time, " ++
+                "throwing errors at you?"
+                ["Compile", "Interpreter"]
 
             Q3: "Would you rather only be able to speak in Perl or only be " ++
                 "able to talk when others are talking about Perl? " 
                 ["Speak in Perl", "Talk when others are talking about Perl"]
 
-        Section Second: "Fact or Fiction"
-            Q5: "Fact or Fiction: Every US president with a beard has been a Democrat." ff
+            Q4: "Would you rather be a garbage collector or a nomad monad?"
+                ["Garbage collector!", "Nomad monad!"]
 
-            Q11: "Fact or Fiction: The world's biggest island is Greenland." ff
+        Section Second: "Fact or Fiction"
+            Q5: "Fact or Fiction: Bruce Molay has a black belt in karate." ff
+
+            Q11: "Fact or Fiction: Sam Guyer is is a licensed airplane pilot." ff
 |]
+
+
+
+
+
 
