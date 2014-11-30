@@ -1,0 +1,27 @@
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+    <h2 ng-hide="showThanks || current_section.title.length == 0">{{section_index + 1}}. {{current_section.title}}</h2>
+    <form ng-hide="showThanks" name="surveyForm" novalidate>
+                <p>{{section_index + 1}}.{{item_index + 1}}. {{current_item.question}}</p>
+                <div class="list-group" >
+                    <a ng-repeat="response in current_item.response" ng-model='$parent.answer' ng-click="showNext(response)" class="list-group-item" href="">{{response}}</a>
+                </div>
+                <button type="button" class="btn btn-lg btn-success" ng-hide="item_index == 0 && section_index == 0" ng-click="back()">Back</button>
+                <button type="button" class="btn btn-lg btn-success" ng-show="showSubmit" ng-click="submit(answer)">Submit + Finish</button>
+            </form>
+        </div>
+    </div>
+    <p ng-show="showThanks">Thanks! 
+        <pre ng-show="showThanks">{{answer}}</pre>
+    </p>
+    <p ng-show="showThanks"><a href="" ng-click="restart()">Restart</a></p>
+</div>
+
+<!-- <pre>section {{section_index}}
+item {{item_index}}
+form = {{answer}}</pre>
+
+{{responses}} -->
+
+

@@ -15,7 +15,7 @@ import Language.Environment
     path, produces a LaTeX file to render the survey in print.
 -}
 
-printLatex :: Survey -> String -> IO ()
+printLatex :: Survey -> FilePath -> IO ()
 printLatex s dest = execLaTeXT (surveyL s) >>= renderFile dest
 
 preamble :: Monad m => LaTeXT_ m

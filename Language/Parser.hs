@@ -42,7 +42,7 @@ qvar = do
 
 qlit :: PS.Parser Question 
 qlit = do 
-    q <- stringLiteral
+    q <- multiline <|> multiline
     return $ Question q
     <?> "literal question (string)"
 
@@ -150,13 +150,24 @@ authorP = do
     author <- stringLiteral 
     return author
 
+multiline' :: PS.Parser String
+multiline' = do
+    string <- stringLiteral
+    optional $ reserved "++"
+    return string 
+
+multiline :: PS.Parser String
+multiline = do
+    strings <- many multiline'
+    return $ mconcat strings
+    
 descriptionP :: PS.Parser String
 descriptionP = do
     reserved "Description"
     whiteSpace
     reserved ":" 
-    description <- stringLiteral 
-    return description
+    description <- multiline <|> stringLiteral
+    return $ description
 
 meta :: PS.Parser Meta
 meta = do
@@ -201,7 +212,7 @@ survey = do
 
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
-  { reservedOpNames = ["(", ")", ",", ":"],
+  { reservedOpNames = ["(", ")", ",", ":", "++"],
     reservedNames   = ["Question", "Response", "skipTo", "Survey", "Section",
                         "Title", "Author", "Description"]})
 

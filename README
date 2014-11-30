@@ -3,11 +3,11 @@ Comp 150pld -- Programming Language Design
 November 21, 2014
 
 After running 'cabal install', run the tests by loading Examples/First.hs in
-ghci and invoke the 'test' function. `latemk` is required to build the pdf files
-from tex.
+ghci and invoke the 'testLatex' and 'testJSON' functions. `latemk` is required 
+to build the pdf files from tex.
 
 To do:
-    - Allow specification of author, institution, survey description
     - Allow adding instructions to a survey or to specific sections
     - Allow for multiple Surveys sharing same variable environment and fixup environment
     - Extend response types to include short answer/blank space
+    - Multiple language support?
