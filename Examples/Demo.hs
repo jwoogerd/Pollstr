@@ -26,7 +26,7 @@ import Language.Quote
             Q1: "Would you rather be stuck in a closure with Ming Chow or " ++
                 "Norman Ramsey?"
                 ["\"Have anyone ever heard of a thing called...\"",
-                 "\"I guess misjudged how long that homework would take.\""]
+                 "\"I guess I misjudged how long that homework would take.\""]
                 skipTo(Q3, ["\"Have anyone ever heard of a thing called...\""])
 
             Q2: "Would you rather have to wait for everything in real life to " ++
