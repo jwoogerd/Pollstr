@@ -5,10 +5,19 @@ import qualified Data.Map.Strict as Map
 
 import Language.Syntax
 
-
 data Env = Env { rs :: Map.Map ID Response
                , qs :: Map.Map ID Question
                } deriving Show
+
+lookupQ :: Env -> ID -> Question
+lookupQ env id = 
+    case (Map.lookup id (qs env)) of Just q  -> q
+                                     Nothing -> error "Question not defined"
+
+lookupR :: Env -> ID -> Response
+lookupR env id = 
+    case (Map.lookup id (rs env)) of Just r  -> r
+                                     Nothing -> error "Question not defined"
 
 makeEnv :: [Decl] -> Env
 makeEnv decls = 

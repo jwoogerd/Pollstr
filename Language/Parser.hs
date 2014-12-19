@@ -1,6 +1,7 @@
 module Language.Parser where
 
 import Language.Syntax
+import Language.Environment
 
 import Text.ParserCombinators.Parsec
 import qualified Text.Parsec.String as PS
@@ -31,13 +32,13 @@ errorParse = do
 
 {- Pollstr parsing -}
 
-question :: PS.Parser Question 
-question = qlit <|> qvar
+question :: Env -> PS.Parser Question 
+question env = qlit <|> qvar env
 
-qvar :: PS.Parser Question 
-qvar = do 
+qvar :: Env -> PS.Parser Question 
+qvar env = do 
     id <- identifier 
-    return $ Qvar id
+    return $ lookupQ env id
     <?> "question variable"
 
 qlit :: PS.Parser Question 
@@ -46,20 +47,20 @@ qlit = do
     return $ Question q
     <?> "literal question (string)"
 
-response :: PS.Parser Response 
-response = rlit <|> rvar
+response :: Env -> PS.Parser Response 
+response env = single <|> rvar env
 
-rvar :: PS.Parser Response
-rvar = do 
+rvar :: Env -> PS.Parser Response
+rvar env = do 
     id <- identifier 
-    return $ Rvar id
+    return $ lookupR env id
     <?> "response variable"
 
-rlit :: PS.Parser Response
-rlit = do 
+single :: PS.Parser Response
+single = do 
     rs <- brackets $ commaSep stringLiteral
-    return $ Response rs
-    <?> "literal response"
+    return $ Single rs
+    <?> "single response"
 
 itemID :: PS.Parser ID
 itemID = do
@@ -68,27 +69,27 @@ itemID = do
     return ("Q" ++ id)
     <?> "item identifier to start with 'Q'"
 
-skipTo :: PS.Parser Skip
-skipTo = do
+skipTo :: Env -> PS.Parser Skip
+skipTo env = do
     reserved "skipTo"
     (id, resp) <- parens (do 
         id <- itemID
         reserved ","
-        resp <- response
+        resp <- (response env)
         return (id, resp)
         )
     return $ Skip id resp
     <?> "skipTo application"
 
-item :: PS.Parser Item
-item = do 
+item :: Env -> PS.Parser Item
+item env = do 
     id <- itemID
     reserved ":"
     whiteSpace
-    quest <- question
+    quest <- (question env)
     whiteSpace
-    resp <- response
-    skip <- option None skipTo
+    resp <- (response env)
+    skip <- option None (skipTo env)
     return $ Item id quest resp skip
     <?> "item statement"
 
@@ -100,8 +101,9 @@ respDecl = do
     whiteSpace
     reserved "="
     whiteSpace
-    resp <- response
-    return $ RespDecl id resp
+    reserved "Single"
+    resp <- single 
+    return $ RespDecl id resp 
     <?> "response declaration"
 
 questDecl :: PS.Parser Decl
@@ -112,7 +114,7 @@ questDecl = do
     whiteSpace
     reserved "="
     whiteSpace
-    quest <- question 
+    quest <- qlit
     return $ QuestDecl id quest
     <?> "question declaration"
 
@@ -176,8 +178,8 @@ meta = do
     description <- optionMaybe descriptionP
     return (Meta title author description)
 
-section :: PS.Parser Section
-section = do
+section :: Env -> PS.Parser Section
+section env = do
     reserved "Section"
     whiteSpace
     id <- upperID
@@ -185,20 +187,21 @@ section = do
     reserved ":" 
     whiteSpace
     title <- stringLiteral
-    items <- manyTill item (lookAhead $ reserved "Section" <|> eof)
+    items <- manyTill (item env) (lookAhead $ reserved "Section" <|> eof)
     return $ Section id title items
     <?> "section"
 
-sections :: PS.Parser [Section]
-sections = do
-    items <- many item
-    case items of [] -> many section
+sections :: Env -> PS.Parser [Section]
+sections env = do
+    items <- many (item env)
+    case items of [] -> many (section env)
                   is -> return $ [Section "Bare" "" items]
                   
 
 survey :: PS.Parser Survey
 survey = do
     ds <- decls
+    let env = makeEnv ds
     reserved "Survey"
     whiteSpace
     id <- upperID 
@@ -206,15 +209,15 @@ survey = do
     reserved ":"
     whiteSpace
     metaData <- meta
-    sects <- sections
-    return $ Survey id metaData ds sects
+    sects <- sections env
+    return $ Survey id metaData sects
     <?> "survey"
 
 lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
   { reservedOpNames = ["(", ")", ",", ":", "++"],
     reservedNames   = ["Question", "Response", "skipTo", "Survey", "Section",
-                        "Title", "Author", "Description"]})
+                        "Title", "Author", "Description", "Single"]})
 
 whiteSpace    = PT.whiteSpace    lexer
 identifier    = PT.identifier    lexer
