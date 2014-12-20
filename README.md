@@ -26,3 +26,5 @@ provided for the respondent to write-in his response.
 specify any number of (non-overlapping) skips. This is still rudimentary, and
 it would be nice to clean up the concrete syntax for this. Additionally, there
 is no check for overlapping options.  
+
+1. Tests have been added for the new features and grammar has been updated.
