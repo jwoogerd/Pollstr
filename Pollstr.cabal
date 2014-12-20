@@ -13,7 +13,7 @@ maintainer:          jayme.woogerd@tufts.edu
 -- category:            
 build-type:          Simple
 extra-source-files: Documentation/Pollstr_grammar.pdf,
-                    Documentation/final.pdf,
+                    Documentation/pollstr_final.pdf,
                     Examples/Reference/simple.tex,
                     Examples/Reference/sections.tex,
                     Examples/Reference/flow.tex,
@@ -34,8 +34,8 @@ extra-source-files: Documentation/Pollstr_grammar.pdf,
                     Examples/Reference/demo.json,
                     Examples/Reference/multi.json,
                     Examples/Reference/free.json,
-                    Examples/Reference/skip.json,
-                    README
+                    Examples/Reference/skips.json,
+                    README.md
 cabal-version:       >=1.10
 
 library
