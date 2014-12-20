@@ -47,12 +47,12 @@ itemsL items =
 questionL :: Monad m => Question -> LaTeXT_ m
 questionL (Question q)  = fromString q
 
-responseL :: Monad m => Response -> Skip -> LaTeXT_ m
-responseL (Single rs) skip = 
+responseL :: Monad m => Response -> [Skip] -> LaTeXT_ m
+responseL (Single rs) skips = 
     let checkbox = fromString "[" <> hspace (Mm 5) <> fromString "]" <> hspace (Mm 4)
         naturals  = iterate (+ 1) 1
         countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
-        responses =  zipWith countBy naturals $ fmap (skipL skip) rs
+        responses =  zipWith countBy naturals $ fmap (skipL skips) rs
     in (mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses))
 responseL (Multi rs) _ = 
     let checkbox = fromString "[" <> hspace (Mm 5) <> fromString "]" <> hspace (Mm 4)
@@ -63,11 +63,12 @@ responseL (Free lines) _ = newline
                            <> (mconcat $ intersperse (vspace (Mm 3.5) <> newline) 
                                    $ take lines $ repeat (underline $ hspace (In 4)))
 
-skipL :: Monad m => Skip -> String -> LaTeXT_ m
-skipL None resp = fromString resp
-skipL (Skip id (Single skips)) resp =
-    fromString resp <>
-    if resp `elem` skips 
-    then hspace (Mm 3) <> textit (fromString "(skip to question "
-         <> ref (fromString id) <> fromString ")")
-    else fromString ""
+skipL :: Monad m => [Skip] -> String -> LaTeXT_ m
+skipL skips resp = 
+    let mkSkip (Skip id opts) rs =
+            rs <>
+            if resp `elem` opts
+            then hspace (Mm 3) <> textit (fromString "(skip to question "
+                 <> ref (fromString id) <> fromString ")")
+            else fromString ""
+    in foldr mkSkip (fromString resp) skips 

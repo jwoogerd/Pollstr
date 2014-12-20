@@ -24,7 +24,7 @@ data Survey     = Survey ID Meta [Section]
 
 data Section    = Section ID Title [Item] deriving (Show, Eq, Typeable, Data)
 
-data Item       = Item ID Question Response Skip
+data Item       = Item ID Question Response [Skip]
                   deriving (Show, Eq, Typeable, Data)
 
 data Question   = Question String deriving (Show, Eq, Typeable, Data)
@@ -32,7 +32,7 @@ data Question   = Question String deriving (Show, Eq, Typeable, Data)
 data Response   = Single Options | Multi Options | Free Lines
                   deriving (Show, Eq, Typeable, Data)
 
-data Skip       = Skip ID Response | None deriving (Show, Eq, Typeable, Data)
+data Skip       = Skip ID Options deriving (Show, Eq, Typeable, Data)
 
 data Decl       = QuestDecl ID Question
                 | RespDecl ID Response deriving (Show, Eq)
@@ -62,18 +62,15 @@ instance ToJSON Response where
     toJSON (Single opts) = object["single" .= opts]
     toJSON (Multi opts)  = object["multi"  .= opts]
     toJSON (Free lines)  = object["free"   .= lines]
-    
+
+instance ToJSON Skip where    
+    toJSON (Skip to opts) = object ["opts" .= toJSON opts, "to" .= to]
+
 instance ToJSON Item where
-    toJSON (Item id (Question q) response None) = 
-        object[ "id" .= id, 
-                "question" .= q,
-                "response" .= toJSON response
-              ]
-    toJSON (Item id (Question q) response (Skip to (Single opts))) = 
+    toJSON (Item id (Question q) response skips) = 
         object[ "id" .= id, 
                 "question" .= q,
                 "response" .= toJSON response,
-                "skips"    .= object ["resp" .= toJSON opts, "to" .= to]
+                "skips"    .= toJSON skips
               ]
-    toJSON _ = error "Skips undefined for response type"
 

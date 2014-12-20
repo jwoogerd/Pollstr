@@ -94,7 +94,8 @@ skipTo env = do
         resp <- (single <|> rvar env)
         return (id, resp)
         )
-    return $ Skip id resp
+    return $ case resp of (Single opts) -> Skip id opts 
+                          _             -> error "Cannot make skip from response type"
     <?> "skipTo application"
 
 item :: Env -> PS.Parser Item
@@ -105,8 +106,8 @@ item env = do
     quest <- (question env)
     whiteSpace
     resp <- (response env)
-    skip <- option None (skipTo env)
-    return $ Item id quest resp skip
+    skips <- many (skipTo env)
+    return $ Item id quest resp skips
     <?> "item statement"
 
 respDecl :: PS.Parser Decl
