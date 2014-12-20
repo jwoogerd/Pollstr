@@ -53,8 +53,15 @@ responseL (Single rs) skip =
         naturals  = iterate (+ 1) 1
         countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
         responses =  zipWith countBy naturals $ fmap (skipL skip) rs
-    in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses)
-responseL (Multi rs) _ = undefined
+    in (mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses))
+responseL (Multi rs) _ = 
+    let checkbox = fromString "[" <> hspace (Mm 5) <> fromString "]" <> hspace (Mm 4)
+        responses =  fmap fromString rs
+    in vspace (Mm 2) <> (textit $ fromString "(Check all that apply)") <> newline 
+       <> (textnormal $ mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses))
+responseL (Free lines) _ = newline 
+                           <> (mconcat $ intersperse (vspace (Mm 3.5) <> newline) 
+                                   $ take lines $ repeat (underline $ hspace (In 4)))
 
 skipL :: Monad m => Skip -> String -> LaTeXT_ m
 skipL None resp = fromString resp

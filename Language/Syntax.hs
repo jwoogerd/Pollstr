@@ -9,9 +9,10 @@ import Language.Haskell.TH.Quote
 
 {- Pollstr abstract syntax -}
 
-type ID         = String
-type Title      = String
-type Options    = [String]
+type ID      = String
+type Title   = String
+type Options = [String]
+type Lines   = Int
 
 data Meta = Meta { title       :: Maybe String
                  , author      :: Maybe String
@@ -28,7 +29,7 @@ data Item       = Item ID Question Response Skip
 
 data Question   = Question String deriving (Show, Eq, Typeable, Data)
 
-data Response   = Single Options | Multi Options  -- | Free
+data Response   = Single Options | Multi Options | Free Lines
                   deriving (Show, Eq, Typeable, Data)
 
 data Skip       = Skip ID Response | None deriving (Show, Eq, Typeable, Data)
@@ -60,6 +61,7 @@ instance ToJSON Section where
 instance ToJSON Response where
     toJSON (Single opts) = object["single" .= opts]
     toJSON (Multi opts)  = object["multi"  .= opts]
+    toJSON (Free lines)  = object["free"   .= lines]
     
 instance ToJSON Item where
     toJSON (Item id (Question q) response None) = 
@@ -73,4 +75,5 @@ instance ToJSON Item where
                 "response" .= toJSON response,
                 "skips"    .= object ["resp" .= toJSON opts, "to" .= to]
               ]
+    toJSON _ = error "Skips undefined for response type"
 

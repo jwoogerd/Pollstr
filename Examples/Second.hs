@@ -8,13 +8,13 @@ import Language.Syntax
 import Language.Quote
 
 {- 
-    These Pollstr programs should all produce parse-time errors.
+    These Pollstr programs should produce parse-time errors.
 -}
 
 
 {- Test duplicate question and response bindings -}
 [pollstr|
-    Response a = Single ["Never", "Sometimes", "Often", "Always"]
+    Response a = ["Never", "Sometimes", "Often", "Always"]
     Question a = "This should be an error"
     Survey Duplicate:
         Q1: "This is a question?" a

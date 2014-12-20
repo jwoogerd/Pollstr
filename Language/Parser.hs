@@ -48,7 +48,7 @@ qlit = do
     <?> "literal question (string)"
 
 response :: Env -> PS.Parser Response 
-response env = single <|> multi <|> rvar env
+response env = single <|> multi <|> free <|> rvar env
 
 rvar :: Env -> PS.Parser Response
 rvar env = do 
@@ -69,6 +69,14 @@ multi = do
     rs <- brackets $ commaSep stringLiteral
     return $ Multi rs
     <?> "multi response"
+
+free :: PS.Parser Response
+free = do
+    reserved "Free"
+    whiteSpace
+    lines <- natural
+    return $ Free (fromIntegral lines)
+    <?> "free response"
 
 itemID :: PS.Parser ID
 itemID = do
@@ -224,13 +232,15 @@ lexer :: PT.TokenParser ()
 lexer = PT.makeTokenParser (haskellStyle 
   { reservedOpNames = ["(", ")", ",", ":", "++"],
     reservedNames   = ["Question", "Response", "skipTo", "Survey", "Section",
-                        "Title", "Author", "Description", "Single"]})
+                       "Title", "Author", "Description", "Single", "Multi",
+                       "Free"]})
 
 whiteSpace    = PT.whiteSpace    lexer
 identifier    = PT.identifier    lexer
 reserved      = PT.reserved      lexer
 colon         = PT.colon         lexer
 stringLiteral = PT.stringLiteral lexer
+natural       = PT.natural       lexer
 reservedOp    = PT.reservedOp    lexer
 commaSep      = PT.commaSep      lexer
 parens        = PT.parens        lexer
