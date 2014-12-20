@@ -6,7 +6,7 @@ import Language.Syntax
 import Language.Quote
 
 {- 
-
+    An example of the multiple-selection response type.
 -}
 
 [pollstr| 

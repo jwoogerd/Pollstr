@@ -5,13 +5,15 @@
                 {
                     "skips": [],
                     "response": {
-                        "single": [
-                            "Yes",
-                            "No"
+                        "multi": [
+                            "The Mighty Ducks",
+                            "Fight Club",
+                            "Love Actually",
+                            "Finding Nemo"
                         ]
                     },
                     "id": "Q1",
-                    "question": "Have you ever seen the movie 'The Mighty Ducks'?"
+                    "question": "What movies have you seen?"
                 }
             ],
             "title": ""
@@ -19,7 +21,7 @@
     ],
     "meta": {
         "author": "",
-        "title": "My first survey",
+        "title": "An example of a survey with multiple selection",
         "description": ""
     }
 }

@@ -6,7 +6,7 @@ import Language.Syntax
 import Language.Quote
 
 {- 
-
+    An example of the free response type.
 -}
 
 [pollstr| 

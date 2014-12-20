@@ -3,38 +3,48 @@
         {
             "items": [
                 {
-                    "skips": {
-                        "resp": [
+                    "skips": [
+                        {
+                            "opts": [
+                                "Often",
+                                "Always"
+                            ],
+                            "to": "Qbrand"
+                        }
+                    ],
+                    "response": {
+                        "single": [
+                            "Never",
+                            "Sometimes",
                             "Often",
                             "Always"
-                        ],
-                        "to": "Qbrand"
+                        ]
                     },
-                    "response": [
-                        "Never",
-                        "Sometimes",
-                        "Often",
-                        "Always"
-                    ],
                     "id": "Qteeth",
                     "question": "How often do you brush your teeth?"
                 },
                 {
-                    "response": [
-                        "Never",
-                        "Sometimes",
-                        "Often",
-                        "Always"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Never",
+                            "Sometimes",
+                            "Often",
+                            "Always"
+                        ]
+                    },
                     "id": "Qhair",
                     "question": "How often do you brush your hair?"
                 },
                 {
-                    "response": [
-                        "Colgate",
-                        "Crest",
-                        "Other"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Colgate",
+                            "Crest",
+                            "Other"
+                        ]
+                    },
                     "id": "Qbrand",
                     "question": "What brand of toothpaste do you use?"
                 }

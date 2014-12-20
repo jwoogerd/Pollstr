@@ -37,10 +37,10 @@ sectionsL (section:rest) = sectionL section <> sectionsL rest
 
 itemsL :: Monad m => [Item] -> LaTeXT_ m
 itemsL items = 
-    let mkItem (Item id quest resp skp) = 
+    let mkItem (Item id quest resp skips) = 
             subsection $ textnormal (questionL quest
                 <> vspace (Mm 2) <> newline  
-                <> responseL resp skp)
+                <> responseL resp skips)
             <> label (fromString id)
     in mconcat $ map mkItem items
 
@@ -60,8 +60,8 @@ responseL (Multi rs) _ =
     in vspace (Mm 2) <> (textit $ fromString "(Check all that apply)") <> newline 
        <> (textnormal $ mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses))
 responseL (Free lines) _ = newline 
-                           <> (mconcat $ intersperse (vspace (Mm 3.5) <> newline) 
-                                   $ take lines $ repeat (underline $ hspace (In 4)))
+                         <> (mconcat $ intersperse (vspace (Mm 3.5) <> newline) 
+                             $ take lines $ repeat (underline $ hspace (In 4)))
 
 skipL :: Monad m => [Skip] -> String -> LaTeXT_ m
 skipL skips resp = 

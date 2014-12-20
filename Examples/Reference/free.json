@@ -5,13 +5,10 @@
                 {
                     "skips": [],
                     "response": {
-                        "single": [
-                            "Yes",
-                            "No"
-                        ]
+                        "free": 5
                     },
                     "id": "Q1",
-                    "question": "Have you ever seen the movie 'The Mighty Ducks'?"
+                    "question": "Explain why a monad is called a monad."
                 }
             ],
             "title": ""
@@ -19,7 +16,7 @@
     ],
     "meta": {
         "author": "",
-        "title": "My first survey",
+        "title": "An example of a survey with a free response type",
         "description": ""
     }
 }

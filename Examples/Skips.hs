@@ -6,7 +6,8 @@ import Language.Syntax
 import Language.Quote
 
 {- 
-
+    This is an example of multiple skip options for one single-choice
+    response.
 -}
 
 [pollstr| 

@@ -1,0 +1,72 @@
+{
+    "sections": [
+        {
+            "items": [
+                {
+                    "skips": [
+                        {
+                            "opts": [
+                                "Abraham Lincoln"
+                            ],
+                            "to": "Q3"
+                        },
+                        {
+                            "opts": [
+                                "FDR"
+                            ],
+                            "to": "Q4"
+                        }
+                    ],
+                    "response": {
+                        "single": [
+                            "Abraham Lincoln",
+                            "George Washington",
+                            "FDR"
+                        ]
+                    },
+                    "id": "Q1",
+                    "question": "Who is your favorite president?"
+                },
+                {
+                    "skips": [],
+                    "response": {
+                        "multi": [
+                            "The Mighty Ducks",
+                            "Fight Club",
+                            "Love Actually",
+                            "Finding Nemo"
+                        ]
+                    },
+                    "id": "Q2",
+                    "question": "What movies have you seen?"
+                },
+                {
+                    "skips": [],
+                    "response": {
+                        "free": 10
+                    },
+                    "id": "Q3",
+                    "question": "Tell a story about a time you got lost."
+                },
+                {
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Why?",
+                            "How?",
+                            "When?"
+                        ]
+                    },
+                    "id": "Q4",
+                    "question": "Another question...."
+                }
+            ],
+            "title": ""
+        }
+    ],
+    "meta": {
+        "author": "",
+        "title": "An example of a survey with more skip logic",
+        "description": ""
+    }
+}

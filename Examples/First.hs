@@ -17,6 +17,9 @@ import Examples.SimpleSurvey
 import Examples.Sections
 import Examples.Flow
 import Examples.Demo
+import Examples.Multi
+import Examples.Free
+import Examples.Skips
 
 {- Pollstr testing suite -}
 
@@ -40,14 +43,26 @@ testLatex = do
     print "Invoking printSections and saving output at 'Examples/sections.tex'"
     printSections "Examples/sections.tex"
 
-    print "Invoking printDemo and saving output at 'Examples/sections.tex'"
+    print "Invoking printDemo and saving output at 'Examples/demo.tex'"
     printDemo "Examples/demo.tex"
+
+    print "Invoking printMulti and saving output at 'Examples/multi.tex'"
+    printMulti "Examples/multi.tex" 
+
+    print "Invoking printFree and saving output at 'Examples/free.tex'"
+    printFree "Examples/free.tex"
+
+    print "Invoking printSkips and saving output at 'Examples/skips.tex'"
+    printSkips "Examples/skips.tex"
 
     print "Generating simple.pdf, flow.pdf, sections.pdf files...and cleaning up"
     createProcess (shell $ "latexmk -pdf Examples/simple.tex &&" ++
                            "latexmk -pdf Examples/flow.tex &&" ++ 
                            "latexmk -pdf Examples/sections.tex && " ++
                            "latexmk -pdf Examples/demo.tex && " ++
+                           "latexmk -pdf Examples/multi.tex && " ++
+                           "latexmk -pdf Examples/free.tex && " ++
+                           "latexmk -pdf Examples/skips.tex && " ++
                            "mv *.pdf Examples/ && rm *.log *.aux *.fls *.fdb_latexmk .temp*")
     print "Reference tex and pdf files are located in Examples/Reference"
     return ()
@@ -65,35 +80,74 @@ testJSON = runTestTT tests
 
 tests = TestList[ TestLabel "SimpleSurvey" simple_test
                 , TestLabel "Sections" sections_test
+                , TestLabel "Multi" multi_test
+                , TestLabel "Free" free_test 
+                , TestLabel "Skips" skips_test
                 ]
 
 -- Testing the simplest survey
 simple_result = toJSONSimple' 
 simple_expected = pack $ 
-    "{\"sections\":[{\"items\":[{\"response\":"
-    ++ "[\"Yes\",\"No\"],\"id\":\"Q1\",\"question\":\"Have you ever seen the movie " 
-    ++ "'The Mighty Ducks'?\"}],\"title\":\"\"}],\"meta\":{\"author\":\"\",\"title\""
-    ++ ":\"My first survey\",\"description\":\"\"}}"
+    "{\"sections\":[{\"items\":[{\"skips\":[],\"response\":{\"single\":[\"Yes\","
+    ++ "\"No\"]},\"id\":\"Q1\",\"question\":\"Have you ever seen the movie 'The "
+    ++ "Mighty Ducks'?\"}],\"title\":\"\"}],\"meta\":{\"author\":\"\",\"title\":"
+    ++ "\"My first survey\",\"description\":\"\"}}"
 simple_test = mkTestCase simple_expected simple_result
 
--- Testing sections, including nested sections
+-- Testing sections
 sections_result = toJSONSections' 
 sections_expected = pack $ 
-    "{\"sections\":[{\"items\":[{\"skips\":{\"resp\":"
-    ++ "[\"Never\"],\"to\":\"Qschool\"},\"response\":[\"Never\",\"Sometimes\","
-    ++ "\"Often\",\"Always\"],\"id\":\"Qteeth\",\"question\":\"How often do you"
-    ++ " brush your teeth?\"},{\"response\":[\"Never\",\"Sometimes\",\"Often\","
-    ++ "\"Always\"],\"id\":\"Qhair\",\"question\":\"How often do you brush your"
-    ++ " hair?\"}],\"title\":\"Hygiene\"},{\"items\":[{\"response\":[\"Never\","
-    ++ "\"Sometimes\",\"Often\",\"Always\"],\"id\":\"Qtrain\",\"question\":\"How"
-    ++ " often do you ride the T?\"}],\"title\":\"Transportation\"},{\"items\":"
-    ++ "[{\"response\":[\"Never\",\"Sometimes\",\"Often\",\"Always\"],\"id\":\""
-    ++ "Qschool\",\"question\":\"How often do you go to school?\"},{\"response\""
-    ++ ":[\"candy\",\"kale\",\"other\"],\"id\":\"Qlunch\",\"question\":\"What "
-    ++ "do you eat for lunch?\"}],\"title\":\"School\"}],\"meta\":{\"author\":"
-    ++ "\"Jayme Woogerd\",\"title\":\"Example Survey with Sections\",\"descrip"
-    ++ "tion\":\"This is an example of sections\"}}"
+    "{\"sections\":[{\"items\":[{\"skips\":[{\"opts\":[\"Never\"],\"to\":\"Qschool"
+    ++ "\"}],\"response\":{\"single\":[\"Never\",\"Sometimes\",\"Often\",\"Always"
+    ++ "\"]},\"id\":\"Qteeth\",\"question\":\"How often do you brush your teeth?"
+    ++ "\"},{\"skips\":[],\"response\":{\"single\":[\"Never\",\"Sometimes\",\"Often"
+    ++ "\",\"Always\"]},\"id\":\"Qhair\",\"question\":\"How often do you brush your"
+    ++ " hair?\"}],\"title\":\"Hygiene\"},{\"items\":[{\"skips\":[],\"response\":{"
+    ++ "\"single\":[\"Never\",\"Sometimes\",\"Often\",\"Always\"]},\"id\":\"Qtrain"
+    ++ "\",\"question\":\"How often do you ride the T?\"}],\"title\":\"Transportati"
+    ++ "on\"},{\"items\":[{\"skips\":[],\"response\":{\"single\":[\"Never\",\"Some"
+    ++ "times\",\"Often\",\"Always\"]},\"id\":\"Qschool\",\"question\":\"How often "
+    ++ "do you go to school?\"},{\"skips\":[],\"response\":{\"single\":[\"candy\","
+    ++ "\"kale\",\"other\"]},\"id\":\"Qlunch\",\"question\":\"What do you eat for "
+    ++ "lunch?\"}],\"title\":\"School\"}],\"meta\":{\"author\":\"Jayme Woogerd\","
+    ++ "\"title\":\"Example Survey with Sections\",\"description\":\"This is an "
+    ++ "example of sections\"}}"
 sections_test = mkTestCase sections_expected sections_result
+
+-- Testing multiple selection response type 
+multi_result = toJSONMulti'
+multi_expected = pack $ 
+    "{\"sections\":[{\"items\":[{\"skips\":[],\"response\":{\"multi\":[\"The Mighty"
+    ++ " Ducks\",\"Fight Club\",\"Love Actually\",\"Finding Nemo\"]},\"id\":\"Q1\","
+    ++ "\"question\":\"What movies have you seen?\"}],\"title\":\"\"}],\"meta\":{"
+    ++ "\"author\":\"\",\"title\":\"An example of a survey with multiple selection"
+    ++ "\",\"description\":\"\"}}"
+multi_test = mkTestCase multi_expected multi_result
+
+-- Testing free response type 
+free_result = toJSONFree'
+free_expected = pack $ 
+    "{\"sections\":[{\"items\":[{\"skips\":[],\"response\":{\"free\":5},\"id\":"
+    ++ "\"Q1\",\"question\":\"Explain why a monad is called a monad.\"}],\"title\""
+    ++ ":\"\"}],\"meta\":{\"author\":\"\",\"title\":\"An example of a survey with a"
+    ++ " free response type\",\"description\":\"\"}}"
+free_test = mkTestCase free_expected free_result
+
+-- Testing multiple skips
+skips_result = toJSONSkips'
+skips_expected = pack $ 
+    "{\"sections\":[{\"items\":[{\"skips\":[{\"opts\":[\"Abraham Lincoln\"],\"to"
+    ++ "\":\"Q3\"},{\"opts\":[\"FDR\"],\"to\":\"Q4\"}],\"response\":{\"single\":"
+    ++ "[\"Abraham Lincoln\",\"George Washington\",\"FDR\"]},\"id\":\"Q1\",\"quest"
+    ++ "ion\":\"Who is your favorite president?\"},{\"skips\":[],\"response\":{\""
+    ++ "multi\":[\"The Mighty Ducks\",\"Fight Club\",\"Love Actually\",\"Finding "
+    ++ "Nemo\"]},\"id\":\"Q2\",\"question\":\"What movies have you seen?\"},{\"ski"
+    ++ "ps\":[],\"response\":{\"free\":10},\"id\":\"Q3\",\"question\":\"Tell a "
+    ++ "story about a time you got lost.\"},{\"skips\":[],\"response\":{\"single\""
+    ++ ":[\"Why?\",\"How?\",\"When?\"]},\"id\":\"Q4\",\"question\":\"Another quest"
+    ++ "ion....\"}],\"title\":\"\"}],\"meta\":{\"author\":\"\",\"title\":\"An examp"
+    ++ "le of a survey with more skip logic\",\"description\":\"\"}}"
+skips_test = mkTestCase skips_expected skips_result
 
 {-
     testing infrastructure (borrowed from Will and Andrew)

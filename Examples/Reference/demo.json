@@ -3,40 +3,53 @@
         {
             "items": [
                 {
-                    "skips": {
-                        "resp": [
-                            "\"Have anyone ever heard of a thing called...\""
-                        ],
-                        "to": "Q3"
-                    },
-                    "response": [
-                        "\"Have anyone ever heard of a thing called...\"",
-                        "\"I guess I misjudged how long that homework would take.\""
+                    "skips": [
+                        {
+                            "opts": [
+                                "\"Have anyone ever heard of a thing called...\""
+                            ],
+                            "to": "Q3"
+                        }
                     ],
+                    "response": {
+                        "single": [
+                            "\"Have anyone ever heard of a thing called...\"",
+                            "\"I guess I misjudged how long that homework would take.\""
+                        ]
+                    },
                     "id": "Q1",
                     "question": "Would you rather be stuck in a closure with Ming Chow or Norman Ramsey?"
                 },
                 {
-                    "response": [
-                        "Compile",
-                        "Interpreter"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Compile",
+                            "Interpreter"
+                        ]
+                    },
                     "id": "Q2",
                     "question": "Would you rather have to wait for everything in real life to compile or have an interpreter follow your around all the time, throwing errors at you?"
                 },
                 {
-                    "response": [
-                        "Speak in Perl",
-                        "Talk when others are talking about Perl"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Speak in Perl",
+                            "Talk when others are talking about Perl"
+                        ]
+                    },
                     "id": "Q3",
                     "question": "Would you rather only be able to speak in Perl or only be able to talk when others are talking about Perl? "
                 },
                 {
-                    "response": [
-                        "Garbage collector!",
-                        "Nomad monad!"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Garbage collector!",
+                            "Nomad monad!"
+                        ]
+                    },
                     "id": "Q4",
                     "question": "Would you rather be a garbage collector or a nomad monad?"
                 }
@@ -46,18 +59,24 @@
         {
             "items": [
                 {
-                    "response": [
-                        "Fact",
-                        "Fiction"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Fact",
+                            "Fiction"
+                        ]
+                    },
                     "id": "Q5",
                     "question": "Fact or Fiction: Bruce Molay has a black belt in karate."
                 },
                 {
-                    "response": [
-                        "Fact",
-                        "Fiction"
-                    ],
+                    "skips": [],
+                    "response": {
+                        "single": [
+                            "Fact",
+                            "Fiction"
+                        ]
+                    },
                     "id": "Q11",
                     "question": "Fact or Fiction: Sam Guyer is is a licensed airplane pilot."
                 }
