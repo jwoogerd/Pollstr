@@ -48,13 +48,13 @@ questionL :: Monad m => Question -> LaTeXT_ m
 questionL (Question q)  = fromString q
 
 responseL :: Monad m => Response -> Skip -> LaTeXT_ m
-responseL (Single rs) skip = let 
-    checkbox = fromString "[" <> hspace (Mm 5) 
-            <> fromString "]" <> hspace (Mm 4)
-    naturals  = iterate (+ 1) 1
-    countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
-    responses =  zipWith countBy naturals $ fmap (skipL skip) rs
+responseL (Single rs) skip = 
+    let checkbox = fromString "[" <> hspace (Mm 5) <> fromString "]" <> hspace (Mm 4)
+        naturals  = iterate (+ 1) 1
+        countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
+        responses =  zipWith countBy naturals $ fmap (skipL skip) rs
     in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses)
+responseL (Multi rs) _ = checkbox
 
 skipL :: Monad m => Skip -> String -> LaTeXT_ m
 skipL None resp = fromString resp

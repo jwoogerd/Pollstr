@@ -12,9 +12,9 @@ import Language.Quote
 -}
 
 [pollstr|
-    Response howFrequent = Single ["Never", "Sometimes", "Often", "Always"]
-    Response bool        = Single ["Yes", "No"]
-    Response ff          = Single ["Fact", "Fiction"]
+    Response howFrequent = ["Never", "Sometimes", "Often", "Always"]
+    Response bool        = ["Yes", "No"]
+    Response ff          = ["Fact", "Fiction"]
 
     Survey Demo:
         Title: "An Example Survey"

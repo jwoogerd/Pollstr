@@ -11,6 +11,7 @@ import Language.Haskell.TH.Quote
 
 type ID         = String
 type Title      = String
+type Options    = [String]
 
 data Meta = Meta { title       :: Maybe String
                  , author      :: Maybe String
@@ -27,7 +28,7 @@ data Item       = Item ID Question Response Skip
 
 data Question   = Question String deriving (Show, Eq, Typeable, Data)
 
-data Response   = Single [String] -- | Multi [String] | Free | Matrix [Question] [String]
+data Response   = Single Options | Multi Options  -- | Free
                   deriving (Show, Eq, Typeable, Data)
 
 data Skip       = Skip ID Response | None deriving (Show, Eq, Typeable, Data)
@@ -56,16 +57,20 @@ instance ToJSON Section where
     toJSON (Section id title items) =
         object ["title" .= title, "items" .= toJSON items]
 
+instance ToJSON Response where
+    toJSON (Single opts) = object["single" .= opts]
+    toJSON (Multi opts)  = object["multi"  .= opts]
+    
 instance ToJSON Item where
-    toJSON (Item id (Question q) (Single r) None) = 
+    toJSON (Item id (Question q) response None) = 
         object[ "id" .= id, 
                 "question" .= q,
-                "response" .= toJSON r
+                "response" .= toJSON response
               ]
-    toJSON (Item id (Question q) (Single r) (Skip to (Single resp))) = 
+    toJSON (Item id (Question q) response (Skip to (Single opts))) = 
         object[ "id" .= id, 
                 "question" .= q,
-                "response" .= (toJSON r),
-                "skips"    .= object ["resp" .= toJSON resp, "to" .= to]
+                "response" .= toJSON response,
+                "skips"    .= object ["resp" .= toJSON opts, "to" .= to]
               ]
 

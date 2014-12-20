@@ -48,7 +48,7 @@ qlit = do
     <?> "literal question (string)"
 
 response :: Env -> PS.Parser Response 
-response env = single <|> rvar env
+response env = single <|> multi <|> rvar env
 
 rvar :: Env -> PS.Parser Response
 rvar env = do 
@@ -61,6 +61,14 @@ single = do
     rs <- brackets $ commaSep stringLiteral
     return $ Single rs
     <?> "single response"
+
+multi :: PS.Parser Response
+multi = do 
+    reserved "Multi"
+    whiteSpace
+    rs <- brackets $ commaSep stringLiteral
+    return $ Multi rs
+    <?> "multi response"
 
 itemID :: PS.Parser ID
 itemID = do
@@ -75,7 +83,7 @@ skipTo env = do
     (id, resp) <- parens (do 
         id <- itemID
         reserved ","
-        resp <- (response env)
+        resp <- (single <|> rvar env)
         return (id, resp)
         )
     return $ Skip id resp
@@ -101,7 +109,6 @@ respDecl = do
     whiteSpace
     reserved "="
     whiteSpace
-    reserved "Single"
     resp <- single 
     return $ RespDecl id resp 
     <?> "response declaration"
