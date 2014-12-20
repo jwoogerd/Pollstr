@@ -22,7 +22,6 @@ import Language.Quote
 
 [pollstr|
     Response howFrequent = ["Never", "Sometimes", "Often", "Always"]
-    Response redundant = howFrequent
 
     Survey Flow: 
         Title: "A short survey about hygiene"
@@ -32,8 +31,8 @@ import Language.Quote
             Qteeth: "How often do you brush your teeth?" howFrequent
                     skipTo(Qbrand, ["Often", "Always"])
 
-            Qhair: "How often do you brush your hair?" redundant 
-
+            Qhair: "How often do you brush your hair?" howFrequent
+                    
             Qbrand: "What brand of toothpaste do you use?"
                     ["Colgate", "Crest", "Other"]
 |]

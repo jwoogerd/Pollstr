@@ -54,7 +54,7 @@ responseL (Single rs) skip =
         countBy n resp = resp <> hspace (Mm 3) <> (fromString $ "(" ++ show n ++ ")")
         responses =  zipWith countBy naturals $ fmap (skipL skip) rs
     in mconcat $ checkbox :(intersperse (hspace (Mm 5) <> newline <> checkbox) responses)
-responseL (Multi rs) _ = checkbox
+responseL (Multi rs) _ = undefined
 
 skipL :: Monad m => Skip -> String -> LaTeXT_ m
 skipL None resp = fromString resp
