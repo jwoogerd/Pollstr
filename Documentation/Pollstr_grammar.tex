@@ -5,7 +5,7 @@
 
 \title{Pollstr Grammar}
 \author{Jayme Woogerd}
-\date{December 1, 2014}
+\date{December 20, 2014}
 
 \setlength{\grammarindent}{6em}
 
@@ -30,17 +30,19 @@
 
     <questDecl>  ::= "Question" <lower> "=" <questExp>
 
-    <respExp>    ::= "[" (<stringLit>) ("," <stringLit>)* "]"
+    <respExp>    ::= <options> | Multi <options> | Free <natural>
+
+    <options>   ::= "[" (<stringLit>) ("," <stringLit>)* "]"
 
     <questExp>   ::= <stringLit>
 
-    <item>       ::= <itemID>":" <question> <response> (<skipTo>)
+    <item>       ::= <itemID>":" <question> <response> (<skipTo>)*
 
     <question>   ::= <questExp> | <lower>
 
     <response>   ::= <respExp> | <lower>
 
-    <skipTo>     ::= "skipTo" "(" <itemID>"," <response> ")"
+    <skipTo>     ::= "skipTo" "(" <itemID>"," <options> ")"
 
     <itemID>     ::= "Q"<alphaNum>*
 
@@ -51,6 +53,8 @@
     <lower>      ::= <identifier> with lowercase first character
 
     <stringLit>  ::= As defined in Text.Parsec.Token
+
+    <natural>    ::= As defined in Text.Parsec.Token
 
     <identifier> ::= As defined in Text.Parsec.Token
 
