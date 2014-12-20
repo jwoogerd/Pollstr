@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                Pollstr
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            An EDSL for specifying and creating surveys for Comp 150PLD.
 -- description:         
 -- license:             
@@ -13,17 +13,28 @@ maintainer:          jayme.woogerd@tufts.edu
 -- category:            
 build-type:          Simple
 extra-source-files: Documentation/Pollstr_grammar.pdf,
+                    Documentation/final.pdf,
                     Examples/Reference/simple.tex,
                     Examples/Reference/sections.tex,
                     Examples/Reference/flow.tex,
                     Examples/Reference/demo.tex,
+                    Examples/Reference/multi.tex,
+                    Examples/Reference/free.tex,
+                    Examples/Reference/skips.tex,
                     Examples/Reference/simple.pdf,
                     Examples/Reference/sections.pdf,
                     Examples/Reference/flow.pdf,
                     Examples/Reference/demo.pdf,
+                    Examples/Reference/multi.pdf,
+                    Examples/Reference/free.pdf,
+                    Examples/Reference/skips.pdf,
                     Examples/Reference/simple.json,
                     Examples/Reference/sections.json,
-                    Examples/Reference/flow.json, Examples/Reference/demo.json,
+                    Examples/Reference/flow.json,
+                    Examples/Reference/demo.json,
+                    Examples/Reference/multi.json,
+                    Examples/Reference/free.json,
+                    Examples/Reference/skip.json,
                     README
 cabal-version:       >=1.10
 
@@ -33,6 +44,9 @@ library
                        Examples.Sections, 
                        Examples.SimpleSurvey, 
                        Examples.Demo, 
+                       Examples.Multi, 
+                       Examples.Free, 
+                       Examples.Skips, 
                        Language.Parser,
                        Language.Syntax,
                        Language.Quote,
